@@ -71,7 +71,14 @@ export default function Home() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // 这里预留 EmailJS 集成接口
+    // 保存到 localStorage 供后台查看
+    const newMessage = {
+      id: Date.now().toString(),
+      ...formData,
+      createdAt: new Date().toISOString(),
+    };
+    const existing = JSON.parse(localStorage.getItem("hospital_messages") || "[]");
+    localStorage.setItem("hospital_messages", JSON.stringify([newMessage, ...existing]));
     setSubmitStatus("success");
     setTimeout(() => setSubmitStatus("idle"), 3000);
     setFormData({ name: "", phone: "", department: "", message: "" });
@@ -102,7 +109,7 @@ export default function Home() {
                   {item === "contact" && "联系我们"}
                 </button>
               ))}
-              <a href="tel:13396376116" className="btn-primary text-sm px-4 py-2">
+              <a href="tel:13396376119" className="btn-primary text-sm px-4 py-2">
                 📞 预约挂号
               </a>
             </div>
@@ -143,22 +150,22 @@ export default function Home() {
             <button onClick={() => scrollTo("departments")} className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-yellow-300 hover:text-blue-800 transition-all">
               了解科室
             </button>
-            <a href="tel:13396376116" className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all">
+            <a href="tel:13396376119" className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all">
               📞 立即咨询
             </a>
           </div>
           <div className="mt-12 flex justify-center gap-8 text-white/80">
             <div className="text-center">
-              <div className="text-3xl font-bold text-yellow-300">20+</div>
-              <div className="text-sm">年专注眼科</div>
+              <div className="text-3xl font-bold text-yellow-300">10+</div>
+              <div className="text-sm">年建院</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-yellow-300">10万+</div>
-              <div className="text-sm">成功手术案例</div>
+              <div className="text-3xl font-bold text-yellow-300">5万+</div>
+              <div className="text-sm">成功手术</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-yellow-300">98%</div>
-              <div className="text-sm">患者满意度</div>
+              <div className="text-3xl font-bold text-yellow-300">省城专家</div>
+              <div className="text-sm">常年坐诊</div>
             </div>
           </div>
         </div>
@@ -205,10 +212,10 @@ export default function Home() {
             <div className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl p-8">
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { num: "20+", label: "年眼科经验" },
-                  { num: "10万+", label: "成功手术" },
+                  { num: "10+", label: "年建院" },
+                  { num: "5万+", label: "成功手术" },
                   { num: "50万+", label: "服务患者" },
-                  { num: "98%", label: "满意率" },
+                  { num: "省城专家", label: "常年坐诊" },
                 ].map((stat) => (
                   <div key={stat.label} className="bg-white rounded-xl p-4 text-center shadow-sm">
                     <div className="text-2xl font-bold text-blue-600">{stat.num}</div>
@@ -298,7 +305,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900">咨询热线</h4>
-                    <p className="text-blue-600 font-medium">133-9637-6116</p>
+                    <p className="text-blue-600 font-medium">133-9637-6119</p>
                     <p className="text-sm text-gray-500">于主任</p>
                   </div>
                 </div>
@@ -308,7 +315,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900">医院地址</h4>
-                    <p className="text-gray-600">山东省滕州市</p>
+                    <p className="text-gray-600">山东省滕州市学院路2899号</p>
                     <p className="text-sm text-gray-500">（具体地址请咨询电话确认）</p>
                   </div>
                 </div>
@@ -413,9 +420,10 @@ export default function Home() {
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">联系方式</h4>
-              <p className="text-sm mb-2">📞 咨询热线：133-9637-6116</p>
+              <p className="text-sm mb-2">📞 咨询热线：133-9637-6119</p>
               <p className="text-sm mb-2">👤 联系人：于主任</p>
-              <p className="text-sm">📍 地址：山东省滕州市</p>
+              <p className="text-sm">📍 地址：山东省滕州市学院路2899号</p>
+              <a href="/admin" className="text-xs text-gray-500 hover:text-gray-300 mt-2 inline-block">管理后台</a>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">

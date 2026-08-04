@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
-import { Noto_Sans_SC } from "next/font/google";
-import "./globals.css";
 
-const notoSansSC = Noto_Sans_SC({
-  subsets: ["latin"],
-  variable: "--font-noto-sans-sc",
-});
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "滕州启明眼科医院 - 专业眼科医疗机构",
@@ -18,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className={`${notoSansSC.variable} h-full antialiased`}>
+    <html lang="zh-CN" className="h-full antialiased">
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
