@@ -34,18 +34,18 @@
 - deploy.sh（一键部署脚本）
 - vercel.json（Vercel 配置）
 - PROGRESS.md（本进度文档）
-- admin/page.tsx（后台管理页面）
+- app/admin/page.tsx（后台管理页面）
 
 ## ✅ 已完成部署
 
 ### 线上地址
-- 生产环境：https://tmey-eye-hospital-7m5p5v2ao-bjzol.vercel.app
-- 后台管理：https://tmey-eye-hospital-7m5p5v2ao-bjzol.vercel.app/admin
+- 生产环境：https://tmey-eye-hospital-qesxjhb3l-bjzol.vercel.app
+- 后台管理：https://tmey-eye-hospital-qesxjhb3l-bjzol.vercel.app/admin
 
 ### GitHub 仓库
 - 地址：https://github.com/yuweiqian1984-ops/tmey-eye-hospital
 - 分支：main
-- 提交次数：6次
+- 提交次数：7次
 
 ### 部署状态
 - ✅ Vercel 部署成功
@@ -57,6 +57,9 @@
 - 电话：133-9637-6119（已更新）
 - 地址：山东省滕州市学院路2899号（已更新）
 - 联系人：于主任
+- 建院时间：10+年
+- 手术量：5万+
+- 专家：省城专家常年坐诊
 
 ### 下一步建议
 - [ ] 绑定自定义域名（如 www.tmeyeye.com）
