@@ -28,30 +28,33 @@
 - app/page.tsx（主页面，包含所有组件）
 - app/layout.tsx（全局布局）
 - app/globals.css（全局样式）
+- app/api/submit/route.ts（Serverless API，接收咨询留言）
+- app/admin/page.tsx（后台管理页面）
 - README.md（项目说明）
 - GITHUB_SETUP.md（GitHub 部署指南）
 - DEPLOY.md（部署文档）
 - deploy.sh（一键部署脚本）
 - vercel.json（Vercel 配置）
 - PROGRESS.md（本进度文档）
-- app/admin/page.tsx（后台管理页面）
 
 ## ✅ 已完成部署
 
 ### 线上地址
-- 生产环境：https://tmey-eye-hospital-qesxjhb3l-bjzol.vercel.app
-- 后台管理：https://tmey-eye-hospital-qesxjhb3l-bjzol.vercel.app/admin
+- 生产环境：https://tmey-eye-hospital-f5o7fl6wb-bjzol.vercel.app
+- 后台管理：https://tmey-eye-hospital-f5o7fl6wb-bjzol.vercel.app/admin
+- API 接口：https://tmey-eye-hospital-f5o7fl6wb-bjzol.vercel.app/api/submit
 
 ### GitHub 仓库
 - 地址：https://github.com/yuweiqian1984-ops/tmey-eye-hospital
 - 分支：main
-- 提交次数：7次
+- 提交次数：8次
 
 ### 部署状态
 - ✅ Vercel 部署成功
 - ✅ 网站可正常访问
-- ✅ 咨询留言表单已上线
-- ✅ 后台管理页面已上线
+- ✅ 咨询留言表单已对接真实 API
+- ✅ 后台管理页面已对接真实 API
+- ✅ 数据存储在 Vercel Serverless 文件系统中
 
 ### 联系方式
 - 电话：133-9637-6119（已更新）
@@ -63,10 +66,10 @@
 
 ### 下一步建议
 - [ ] 绑定自定义域名（如 www.tmeyeye.com）
-- [ ] 配置 HTTPS 证书
-- [ ] 接入后端服务（如 Formspree）接收真实咨询数据
-- [ ] 添加网站统计（如 Google Analytics 或百度统计）
+- [ ] 配置 HTTPS 证书（Vercel 已自动配置）
+- [ ] 添加网站统计（如百度统计）
 - [ ] 定期更新医院新闻和案例
+- [ ] 考虑使用邮件通知功能（当有新咨询时发送邮件）
 
 ---
 创建时间：2026-08-03
