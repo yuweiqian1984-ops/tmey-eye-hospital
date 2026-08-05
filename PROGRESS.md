@@ -17,6 +17,7 @@
 - ✅ 咨询留言表单
 - ✅ 联系我们（电话：133-9637-6119，于主任）
 - ✅ 响应式设计（支持手机/平板/PC）
+- ✅ 后台管理页面
 
 ### 2. 技术状态
 - ✅ 代码已提交到 Git 本地仓库
@@ -24,6 +25,7 @@
 - ✅ 本地可运行：npm run dev → http://localhost:3000
 - ✅ Git 远程仓库地址已设置
 - ✅ Git 提交邮箱已修复（yuweiqian1984@gmail.com）
+- ✅ 已推送到 GitHub
 
 ### 3. 生成的文件
 - app/page.tsx（主页面，包含所有组件）
@@ -41,14 +43,14 @@
 ## ✅ 已完成部署
 
 ### 线上地址
-- 生产环境：https://tmey-eye-hospital-2aqbfbcl4-bjzol.vercel.app
-- 后台管理：https://tmey-eye-hospital-2aqbfbcl4-bjzol.vercel.app/admin
-- API 接口：https://tmey-eye-hospital-2aqbfbcl4-bjzol.vercel.app/api/submit
+- 生产环境：https://tmey-eye-hospital.vercel.app
+- 后台管理：https://tmey-eye-hospital.vercel.app/admin
+- API 接口：https://tmey-eye-hospital.vercel.app/api/submit
 
 ### GitHub 仓库
 - 地址：https://github.com/yuweiqian1984-ops/tmey-eye-hospital
 - 分支：main
-- 提交次数：13次
+- 提交次数：15次（最新：修复表单提交调用 API）
 
 ### 部署状态
 - ✅ Vercel 部署成功
@@ -65,12 +67,19 @@
 - 手术量：5万+
 - 专家：省城专家常年坐诊
 
+### 踩坑记录
+- Vercel Serverless 环境不支持写入 /data 目录，改用 /tmp
+- /tmp 在冷启动时会被清空，需要每次启动时重新创建目录
+- 需要正确设置 CORS 头以允许跨域请求
+- 表单只保存到 localStorage，没有调用后端 API（已修复）
+
 ### 下一步建议
 - [ ] 绑定自定义域名（如 www.tmeyeye.com）
 - [ ] 配置 HTTPS 证书（Vercel 已自动配置）
 - [ ] 添加网站统计（如百度统计）
 - [ ] 定期更新医院新闻和案例
 - [ ] 考虑使用邮件通知功能（当有新咨询时发送邮件）
+- [ ] 后台管理页面可以添加登录保护
 
 ---
 创建时间：2026-08-03
