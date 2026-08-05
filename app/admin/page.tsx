@@ -15,26 +15,35 @@ export default function AdminPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    const stored = localStorage.getItem("hospital_messages");
-    if (stored) {
-      setMessages(JSON.parse(stored));
-    }
-    setLoading(false);
-  }, []);
+    fetch("/api/submit")
+      .then((res) => res.json())
+      .then((data) => {
+        setMessages(data.messages || []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [refreshKey]);
 
-  const deleteMessage = (id: string) => {
-    const updated = messages.filter((m) => m.id !== id);
-    setMessages(updated);
-    localStorage.setItem("hospital_messages", JSON.stringify(updated));
+  const deleteMessage = async (id: string) => {
+    if (!confirm("确定要删除这条记录吗？")) return;
+    // 重新加载列表
+    fetch("/api/submit")
+      .then((res) => res.json())
+      .then((data) => {
+        const updated = (data.messages || []).filter((m: Message) => m.id !== id);
+        setMessages(updated);
+      });
   };
 
   const clearAll = () => {
-    if (confirm("确定要清空所有咨询记录吗？")) {
-      setMessages([]);
-      localStorage.removeItem("hospital_messages");
-    }
+    if (!confirm("确定要清空所有咨询记录吗？此操作不可恢复。")) return;
+    // 刷新列表
+    setRefreshKey((k) => k + 1);
+    // 同时清空 localStorage
+    localStorage.removeItem("hospital_messages");
   };
 
   const filtered = messages.filter(

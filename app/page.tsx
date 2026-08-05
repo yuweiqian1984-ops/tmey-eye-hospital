@@ -69,19 +69,25 @@ export default function Home() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // 保存到 localStorage 供后台查看
-    const newMessage = {
-      id: Date.now().toString(),
-      ...formData,
-      createdAt: new Date().toISOString(),
-    };
-    const existing = JSON.parse(localStorage.getItem("hospital_messages") || "[]");
-    localStorage.setItem("hospital_messages", JSON.stringify([newMessage, ...existing]));
-    setSubmitStatus("success");
-    setTimeout(() => setSubmitStatus("idle"), 3000);
-    setFormData({ name: "", phone: "", department: "", message: "" });
+    setSubmitStatus("idle");
+    try {
+      const res = await fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        setSubmitStatus("success");
+        setTimeout(() => setSubmitStatus("idle"), 3000);
+        setFormData({ name: "", phone: "", department: "", message: "" });
+      } else {
+        setSubmitStatus("error");
+      }
+    } catch {
+      setSubmitStatus("error");
+    }
   };
 
   return (
@@ -366,11 +372,11 @@ export default function Home() {
                     className="form-input"
                   >
                     <option value="">请选择咨询项目</option>
-                    <option value="refractive">屈光手术（近视矫正）</option>
-                    <option value="cataract">白内障手术</option>
-                    <option value="glaucoma">青光眼诊疗</option>
-                    <option value="optometry">眼视光（验光配镜）</option>
-                    <option value="other">其他咨询</option>
+                    <option value="屈光手术">屈光手术（近视矫正）</option>
+                    <option value="白内障">白内障手术</option>
+                    <option value="青光眼">青光眼诊疗</option>
+                    <option value="眼视光">眼视光（验光配镜）</option>
+                    <option value="其他">其他咨询</option>
                   </select>
                 </div>
                 <div>
@@ -387,7 +393,7 @@ export default function Home() {
                   type="submit"
                   className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                 >
-                  {submitStatus === "success" ? "✓ 提交成功" : "提交咨询"}
+                  {submitStatus === "success" ? "✓ 提交成功" : submitStatus === "error" ? "✗ 提交失败，请重试" : "提交咨询"}
                 </button>
                 <p className="text-xs text-gray-500 text-center">
                   我们承诺保护您的个人信息安全，仅用于医疗服务预约
