@@ -47,6 +47,15 @@ const departments = [
   },
 ];
 
+interface Message {
+  id: string;
+  name: string;
+  phone: string;
+  department: string;
+  message: string;
+  createdAt: string;
+}
+
 // 首页
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
@@ -69,25 +78,22 @@ export default function Home() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitStatus("idle");
-    try {
-      const res = await fetch("/api/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      if (res.ok) {
-        setSubmitStatus("success");
-        setTimeout(() => setSubmitStatus("idle"), 3000);
-        setFormData({ name: "", phone: "", department: "", message: "" });
-      } else {
-        setSubmitStatus("error");
-      }
-    } catch {
-      setSubmitStatus("error");
-    }
+    
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      ...formData,
+      createdAt: new Date().toISOString(),
+    };
+    
+    // 保存到 localStorage
+    const existing: Message[] = JSON.parse(localStorage.getItem("hospital_messages") || "[]");
+    localStorage.setItem("hospital_messages", JSON.stringify([newMessage, ...existing]));
+    
+    setSubmitStatus("success");
+    setTimeout(() => setSubmitStatus("idle"), 3000);
+    setFormData({ name: "", phone: "", department: "", message: "" });
   };
 
   return (
@@ -119,7 +125,6 @@ export default function Home() {
                 📞 预约挂号
               </a>
             </div>
-            {/* 移动端菜单按钮 */}
             <button className="md:hidden p-2" onClick={() => scrollTo("home")}>
               <span className={`text-2xl ${scrolled ? "text-gray-700" : "text-white"}`}>☰</span>
             </button>
