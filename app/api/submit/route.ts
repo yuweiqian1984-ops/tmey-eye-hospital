@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFileSync, readFileSync } from 'fs';
+import { writeFileSync, readFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
-const DATA_FILE = join(process.cwd(), 'data/messages.json');
+// 使用 /tmp 目录（Serverless 环境可写）
+const DATA_DIR = process.env.NODE_ENV === 'production' 
+  ? '/tmp/hospital-data' 
+  : join(process.cwd(), 'data');
+const DATA_FILE = join(DATA_DIR, 'messages.json');
 
 interface Message {
   id: string;
@@ -33,6 +37,11 @@ export async function POST(request: NextRequest) {
       message: message || '',
       createdAt: new Date().toISOString(),
     };
+
+    // 确保目录存在
+    try {
+      mkdirSync(DATA_DIR, { recursive: true });
+    } catch {}
 
     let messages: Message[] = [];
     try {
