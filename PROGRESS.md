@@ -23,6 +23,7 @@
 - ✅ 构建成功：npm run build 通过
 - ✅ 本地可运行：npm run dev → http://localhost:3000
 - ✅ Git 远程仓库地址已设置
+- ✅ Git 提交邮箱已修复（yuweiqian1984@gmail.com）
 
 ### 3. 生成的文件
 - app/page.tsx（主页面，包含所有组件）
@@ -40,14 +41,14 @@
 ## ✅ 已完成部署
 
 ### 线上地址
-- 生产环境：https://tmey-eye-hospital-f5o7fl6wb-bjzol.vercel.app
-- 后台管理：https://tmey-eye-hospital-f5o7fl6wb-bjzol.vercel.app/admin
-- API 接口：https://tmey-eye-hospital-f5o7fl6wb-bjzol.vercel.app/api/submit
+- 生产环境：https://tmey-eye-hospital-2aqbfbcl4-bjzol.vercel.app
+- 后台管理：https://tmey-eye-hospital-2aqbfbcl4-bjzol.vercel.app/admin
+- API 接口：https://tmey-eye-hospital-2aqbfbcl4-bjzol.vercel.app/api/submit
 
 ### GitHub 仓库
 - 地址：https://github.com/yuweiqian1984-ops/tmey-eye-hospital
 - 分支：main
-- 提交次数：8次
+- 提交次数：13次
 
 ### 部署状态
 - ✅ Vercel 部署成功
