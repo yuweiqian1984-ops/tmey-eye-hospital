@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFileSync, readFileSync, mkdirSync } from 'fs';
+import { writeFileSync, readFileSync, mkdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 
 // 使用 /tmp 目录（Serverless 环境可写）
@@ -20,6 +20,44 @@ interface Message {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    
+    // 支持清空全部
+    if (body.messages !== undefined && Array.isArray(body.messages)) {
+      try {
+        mkdirSync(DATA_DIR, { recursive: true });
+        writeFileSync(DATA_FILE, JSON.stringify(body.messages, null, 2));
+        return NextResponse.json({ success: true });
+      } catch (error) {
+        return NextResponse.json(
+          { error: '清空失败' },
+          { status: 500 }
+        );
+      }
+    }
+    
+    // 支持删除单条
+    if (body.deleteId) {
+      let messages: Message[] = [];
+      try {
+        const data = readFileSync(DATA_FILE, 'utf-8');
+        messages = JSON.parse(data);
+      } catch {}
+      
+      messages = messages.filter((m: Message) => m.id !== body.deleteId);
+      
+      try {
+        mkdirSync(DATA_DIR, { recursive: true });
+        writeFileSync(DATA_FILE, JSON.stringify(messages, null, 2));
+        return NextResponse.json({ success: true });
+      } catch (error) {
+        return NextResponse.json(
+          { error: '删除失败' },
+          { status: 500 }
+        );
+      }
+    }
+    
+    // 正常提交
     const { name, phone, department, message } = body;
 
     if (!name || !phone) {

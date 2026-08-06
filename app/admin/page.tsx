@@ -17,23 +17,47 @@ export default function AdminPage() {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    const stored = localStorage.getItem("hospital_messages");
-    if (stored) {
-      setMessages(JSON.parse(stored));
-    }
-    setLoading(false);
+    // 从 API 获取数据
+    fetch("/api/submit")
+      .then(res => res.json())
+      .then(data => {
+        if (data.messages) {
+          setMessages(data.messages);
+        }
+      })
+      .catch(err => console.error("获取数据失败:", err))
+      .finally(() => setLoading(false));
   }, []);
 
-  const deleteMessage = (id: string) => {
+  const deleteMessage = async (id: string) => {
+    // 从本地状态删除
     const updated = messages.filter((m) => m.id !== id);
     setMessages(updated);
-    localStorage.setItem("hospital_messages", JSON.stringify(updated));
+    
+    // 重新写入文件
+    try {
+      await fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: updated }),
+      });
+    } catch (err) {
+      console.error("删除失败:", err);
+    }
   };
 
-  const clearAll = () => {
+  const clearAll = async () => {
     if (confirm("确定要清空所有咨询记录吗？")) {
       setMessages([]);
-      localStorage.removeItem("hospital_messages");
+      try {
+        await fetch("/api/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages: [] }),
+        });
+      } catch (err) {
+        console.error("清空失败:", err);
+      }
     }
   };
 
