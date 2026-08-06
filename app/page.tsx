@@ -78,22 +78,30 @@ export default function Home() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      ...formData,
-      createdAt: new Date().toISOString(),
-    };
-    
-    // 保存到 localStorage
-    const existing: Message[] = JSON.parse(localStorage.getItem("hospital_messages") || "[]");
-    localStorage.setItem("hospital_messages", JSON.stringify([newMessage, ...existing]));
-    
-    setSubmitStatus("success");
-    setTimeout(() => setSubmitStatus("idle"), 3000);
-    setFormData({ name: "", phone: "", department: "", message: "" });
+    try {
+      const response = await fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setSubmitStatus("success");
+        setTimeout(() => setSubmitStatus("idle"), 3000);
+        setFormData({ name: "", phone: "", department: "", message: "" });
+      } else {
+        setSubmitStatus("error");
+        setTimeout(() => setSubmitStatus("idle"), 3000);
+      }
+    } catch (error) {
+      setSubmitStatus("error");
+      setTimeout(() => setSubmitStatus("idle"), 3000);
+    }
   };
 
   return (
