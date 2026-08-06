@@ -78,30 +78,28 @@ export default function Home() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    try {
-      const response = await fetch("/api/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      
-      const data = await response.json();
-      
-      if (data.success) {
-        setSubmitStatus("success");
-        setTimeout(() => setSubmitStatus("idle"), 3000);
-        setFormData({ name: "", phone: "", department: "", message: "" });
-      } else {
+    // 调用后端 API
+    fetch("/api/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setSubmitStatus("success");
+          setTimeout(() => setSubmitStatus("idle"), 3000);
+          setFormData({ name: "", phone: "", department: "", message: "" });
+        } else {
+          setSubmitStatus("error");
+        }
+      })
+      .catch(() => {
         setSubmitStatus("error");
-        setTimeout(() => setSubmitStatus("idle"), 3000);
-      }
-    } catch (error) {
-      setSubmitStatus("error");
-      setTimeout(() => setSubmitStatus("idle"), 3000);
-    }
+      });
   };
 
   return (
@@ -206,41 +204,37 @@ export default function Home() {
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-6">专业眼科医疗机构</h3>
               <p className="text-gray-600 mb-4 leading-relaxed">
-                滕州启明眼科医院是一家集医疗、教学、科研、预防为一体的现代化眼科医院。
-                医院引进了德国蔡司全飞秒激光系统、美国爱尔康超声乳化仪等国际先进设备，
-                为患者提供精准、安全、舒适的眼科诊疗服务。
+                滕州启明眼科医院始建于10多年前，是一家专注于眼科诊疗的专业医疗机构。
+                医院拥有先进的眼科诊疗设备，汇聚了省城三甲医院专家常年坐诊。
               </p>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                医院现有眼科专家十余名，其中主任医师3名，副主任医师5名，
-                具备丰富的临床经验，年均完成各类眼科手术数万例。
+              <p className="text-gray-600 mb-4 leading-relaxed">
+                累计完成手术5万+例，涵盖近视矫正、白内障、青光眼等各类眼病治疗。
+                我们以精湛的医术、优质的服务，守护每一位患者的清晰视界。
               </p>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { icon: "✅", text: "德国蔡司全飞秒" },
-                  { icon: "✅", text: "专业眼科团队" },
-                  { icon: "✅", text: "温馨就诊环境" },
-                  { icon: "✅", text: "透明合理收费" },
-                ].map((item) => (
-                  <div key={item.text} className="flex items-center gap-2 text-gray-700">
-                    <span>{item.icon}</span>
-                    <span className="text-sm">{item.text}</span>
-                  </div>
-                ))}
+              <div className="grid grid-cols-3 gap-4 mt-8">
+                <div className="text-center p-4 bg-blue-50 rounded-lg">
+                  <div className="text-2xl font-bold text-blue-600">10+</div>
+                  <div className="text-sm text-gray-600">年建院历史</div>
+                </div>
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600">5万+</div>
+                  <div className="text-sm text-gray-600">成功手术</div>
+                </div>
+                <div className="text-center p-4 bg-purple-50 rounded-lg">
+                  <div className="text-2xl font-bold text-purple-600">省城专家</div>
+                  <div className="text-sm text-gray-600">常年坐诊</div>
+                </div>
               </div>
             </div>
-            <div className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl p-8">
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { num: "10+", label: "年建院" },
-                  { num: "5万+", label: "成功手术" },
-                  { num: "50万+", label: "服务患者" },
-                  { num: "省城专家", label: "常年坐诊" },
-                ].map((stat) => (
-                  <div key={stat.label} className="bg-white rounded-xl p-4 text-center shadow-sm">
-                    <div className="text-2xl font-bold text-blue-600">{stat.num}</div>
-                    <div className="text-sm text-gray-500">{stat.label}</div>
-                  </div>
-                ))}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-teal-400 rounded-2xl transform rotate-3 opacity-20"></div>
+              <div className="relative bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl p-8">
+                <div className="text-6xl text-center mb-4">👁️</div>
+                <h4 className="text-center font-bold text-gray-900 mb-2">专业设备 · 专家团队</h4>
+                <p className="text-center text-gray-600 text-sm">
+                  引进国际先进眼科诊疗设备<br />
+                  省城三甲医院专家常年坐诊
+                </p>
               </div>
             </div>
           </div>

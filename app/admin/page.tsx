@@ -19,45 +19,39 @@ export default function AdminPage() {
   useEffect(() => {
     // 从 API 获取数据
     fetch("/api/submit")
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.messages) {
           setMessages(data.messages);
         }
+        setLoading(false);
       })
-      .catch(err => console.error("获取数据失败:", err))
-      .finally(() => setLoading(false));
+      .catch(() => {
+        setLoading(false);
+      });
   }, []);
 
-  const deleteMessage = async (id: string) => {
-    // 从本地状态删除
-    const updated = messages.filter((m) => m.id !== id);
-    setMessages(updated);
-    
-    // 重新写入文件
-    try {
-      await fetch("/api/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: updated }),
-      });
-    } catch (err) {
-      console.error("删除失败:", err);
-    }
+  const deleteMessage = (id: string) => {
+    // 调用 API 删除
+    fetch("/api/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ deleteId: id }),
+    }).then(() => {
+      setMessages(messages.filter((m) => m.id !== id));
+    });
   };
 
-  const clearAll = async () => {
+  const clearAll = () => {
     if (confirm("确定要清空所有咨询记录吗？")) {
-      setMessages([]);
-      try {
-        await fetch("/api/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: [] }),
-        });
-      } catch (err) {
-        console.error("清空失败:", err);
-      }
+      // 调用 API 清空
+      fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: [] }),
+      }).then(() => {
+        setMessages([]);
+      });
     }
   };
 
