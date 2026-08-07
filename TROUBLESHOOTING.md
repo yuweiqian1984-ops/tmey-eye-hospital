@@ -220,6 +220,120 @@ npm run build
 
 ---
 
+## 11. GitHub Pages 部署失败：Not Found
+
+### 问题
+GitHub Actions 部署失败，错误：
+```
+HttpError: Not Found
+Ensure GitHub Pages has been enabled: https://github.com/user/repo/settings/pages
+```
+
+### 原因
+GitHub Pages 功能未在仓库设置中启用
+
+### 解决方案
+1. 访问：https://github.com/yuweiqian1984-ops/tmey-eye-hospital/settings/pages
+2. Source 选择 `deploy from a branch`
+3. Branch 选择 `main`，Folder 选择 `/(root)`
+4. 点击 Save
+5. 等待 GitHub Actions 自动重新部署
+
+### 预防措施
+- 部署前确认 GitHub Pages 已启用
+- 检查 workflow 权限设置
+
+---
+
+## 12. Vercel 域名国内访问慢
+
+### 问题
+https://tmey-eye-hospital.vercel.app 在国内访问困难
+
+### 原因
+Vercel 服务器在海外，国内访问速度慢或不稳定
+
+### 解决方案
+切换到 GitHub Pages 或国内云服务商：
+- GitHub Pages：https://yuweiqian1984-ops.github.io/tmey-eye-hospital
+- 腾讯云 CODA：免费额度
+- 阿里云函数计算：有免费 tier
+- Cloudflare Pages：免费，部分区域可用
+
+### 预防措施
+- 目标用户在国内时，优先选择国内部署方案
+- 或使用 CDN 加速（如 Cloudflare）
+
+---
+
+## 13. 删除 API 路由后构建警告
+
+### 问题
+删除 `app/api/submit/` 后，构建时有警告：
+```
+⚠ Found lockfile missing swc dependencies, patching...
+```
+
+### 原因
+lockfile 缺少 SWC 相关依赖，但不影响构建
+
+### 解决方案
+忽略警告，或重新安装依赖：
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+---
+
+## 14. Next.js 静态导出图片优化限制
+
+### 问题
+使用 `output: 'export'` 后，Next.js 默认的图片优化功能不可用
+
+### 原因
+静态导出无法使用 Next.js Image Optimization API
+
+### 解决方案
+在 next.config.js 中配置：
+```javascript
+const nextConfig = {
+  reactStrictMode: true,
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
+};
+```
+
+### 预防措施
+- 使用静态导出时，必须配置 `images: { unoptimized: true }`
+
+---
+
+## 15. GitHub Actions Workflow 权限不足
+
+### 问题
+部署失败，错误：`HttpError: Not Found`
+
+### 原因
+GitHub Actions 需要 Pages 权限才能部署
+
+### 解决方案
+确保 workflow 文件包含正确权限：
+```yaml
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+```
+
+### 预防措施
+- 检查 workflow 文件权限配置
+- 确认仓库 Settings → Pages 已启用
+
+---
+
 ## 常用排查命令
 
 ```bash
