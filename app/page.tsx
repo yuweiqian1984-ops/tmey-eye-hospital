@@ -81,25 +81,19 @@ export default function Home() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // 调用后端 API
-    fetch("/api/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setSubmitStatus("success");
-          setTimeout(() => setSubmitStatus("idle"), 3000);
-          setFormData({ name: "", phone: "", department: "", message: "" });
-        } else {
-          setSubmitStatus("error");
-        }
-      })
-      .catch(() => {
-        setSubmitStatus("error");
-      });
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      ...formData,
+      createdAt: new Date().toISOString(),
+    };
+    
+    // 保存到 localStorage
+    const existing: Message[] = JSON.parse(localStorage.getItem("hospital_messages") || "[]");
+    localStorage.setItem("hospital_messages", JSON.stringify([newMessage, ...existing]));
+    
+    setSubmitStatus("success");
+    setTimeout(() => setSubmitStatus("idle"), 3000);
+    setFormData({ name: "", phone: "", department: "", message: "" });
   };
 
   return (

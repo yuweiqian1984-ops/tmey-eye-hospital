@@ -17,41 +17,24 @@ export default function AdminPage() {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    // 从 API 获取数据
-    fetch("/api/submit")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.messages) {
-          setMessages(data.messages);
-        }
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
+    // 从 localStorage 获取数据
+    const stored = localStorage.getItem("hospital_messages");
+    if (stored) {
+      setMessages(JSON.parse(stored));
+    }
+    setLoading(false);
   }, []);
 
   const deleteMessage = (id: string) => {
-    // 调用 API 删除
-    fetch("/api/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ deleteId: id }),
-    }).then(() => {
-      setMessages(messages.filter((m) => m.id !== id));
-    });
+    const updated = messages.filter((m) => m.id !== id);
+    setMessages(updated);
+    localStorage.setItem("hospital_messages", JSON.stringify(updated));
   };
 
   const clearAll = () => {
     if (confirm("确定要清空所有咨询记录吗？")) {
-      // 调用 API 清空
-      fetch("/api/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: [] }),
-      }).then(() => {
-        setMessages([]);
-      });
+      setMessages([]);
+      localStorage.removeItem("hospital_messages");
     }
   };
 
