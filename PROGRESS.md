@@ -5,7 +5,7 @@
 - 技术栈：Next.js 14 + Tailwind CSS + TypeScript
 - 项目路径：/Users/Admin/docs/site/tmey-eye-hospital
 - GitHub 仓库：https://github.com/yuweiqian1984-ops/tmey-eye-hospital
-- 部署目标：GitHub Pages（免费）
+- 部署目标：Cloudflare Pages / Surge.sh（GitHub Pages 不支持免费账户）
 
 ## ✅ 已完成工作
 
@@ -38,23 +38,42 @@
   - ✅ app/admin/page.tsx（后台管理页面）
   - ✅ README.md（项目说明）
   - ✅ TROUBLESHOOTING.md（踩坑记录）
+  - ✅ DEPLOY-GUIDE.md（部署指南）
   - ✅ .github/workflows/pages.yml（GitHub Pages 部署）
   - ✅ next.config.js（静态导出配置）
+  - ✅ out/ 目录（静态文件，已打包为 /tmp/tmey-eye-site.zip）
 
 ## ⏳ 待完成工作
 
-### 1. GitHub Pages 部署（阻塞中）
-- 状态：GitHub Pages 功能未启用，导致部署失败
-- 错误信息：`HttpError: Not Found` - 需要先在仓库设置中启用 Pages
-- **必须手动操作**：
-  1. 访问 https://github.com/yuweiqian1984-ops/tmey-eye-hospital/settings/pages
-  2. 在 "Source" 部分选择 `Deploy from a branch`
-  3. Branch 选择 `main`，Folder 选择 `/(root)`
-  4. 点击 Save 保存
-  5. 等待 GitHub Actions 自动构建和部署（约1-2分钟）
-- 完成后访问地址：
-  - 官网：https://yuweiqian1984-ops.github.io/tmey-eye-hospital
-  - 后台：https://yuweiqian1984-ops.github.io/tmey-eye-hospital/admin
+### 1. 网站部署（阻塞中）
+- **问题**：GitHub Pages 不支持免费账户的 Pages 功能
+- **解决方案**：改用 Cloudflare Pages 或 Surge.sh
+- **静态文件位置**：`/Users/Admin/docs/site/tmey-eye-hospital/out/`
+- **打包文件**：`/tmp/tmey-eye-site.zip`（245KB）
+
+### 部署选项：
+
+#### 方案一：Cloudflare Pages（推荐，国内访问快）
+1. 访问 https://dash.cloudflare.com/sign-up 注册账户
+2. 点击 "Create a project" → "Connect to Git"
+3. 选择 GitHub 仓库：`yuweiqian1984-ops/tmey-eye-hospital`
+4. 设置构建参数：
+   - Build command: `npm run build`
+   - Output directory: `out`
+5. 点击 "Save and Deploy"
+
+#### 方案二：Surge.sh（最简单）
+1. 访问 https://surge.sh/help/getting-started-with-surge 注册
+2. 在项目目录运行：
+   ```bash
+   cd /Users/Admin/docs/site/tmey-eye-hospital
+   npx surge out/ tmey-eye.surge.sh
+   ```
+
+#### 方案三：Tiiny.host（临时方案）
+1. 访问 https://tiiny.host/
+2. 上传 `/tmp/tmey-eye-site.zip`
+3. 获取临时链接
 
 ### 2. 后续优化建议
 - [ ] 绑定自定义域名（如 www.tmeyeye.com）
@@ -106,7 +125,12 @@
 
 ### 8. Vercel 域名国内访问慢
 - **问题**：https://tmey-eye-hospital.vercel.app 在国内访问困难
-- **解决方案**：切换到 GitHub Pages（免费）
+- **解决方案**：切换到 GitHub Pages / Cloudflare Pages（免费）
+
+### 9. GitHub 免费账户不支持 Pages
+- **问题**：您的 GitHub 账户不支持 GitHub Pages 功能
+- **错误**：`Your current plan does not support GitHub Pages for this repository.`
+- **解决方案**：改用 Cloudflare Pages 或 Surge.sh
 
 ---
 创建时间：2026-08-03
