@@ -37,20 +37,24 @@
   - ✅ app/globals.css（全局样式）
   - ✅ app/admin/page.tsx（后台管理页面）
   - ✅ README.md（项目说明）
-  - ✅ GITHUB_SETUP.md（GitHub 部署指南）
-  - ✅ DEPLOY.md（部署文档）
   - ✅ TROUBLESHOOTING.md（踩坑记录）
   - ✅ .github/workflows/pages.yml（GitHub Pages 部署）
   - ✅ next.config.js（静态导出配置）
 
 ## ⏳ 待完成工作
 
-### 1. GitHub Pages 部署
-- 状态：等待用户启用 GitHub Pages 功能
-- 操作：访问 https://github.com/yuweiqian1984-ops/tmey-eye-hospital/settings/pages
-- 设置：Source 选择 `deploy from a branch`，Branch 选 `main`，Folder 选 `/(root)`
-- 完成后访问地址：https://yuweiqian1984-ops.github.io/tmey-eye-hospital
-- 后台管理：https://yuweiqian1984-ops.github.io/tmey-eye-hospital/admin
+### 1. GitHub Pages 部署（阻塞中）
+- 状态：GitHub Pages 功能未启用，导致部署失败
+- 错误信息：`HttpError: Not Found` - 需要先在仓库设置中启用 Pages
+- **必须手动操作**：
+  1. 访问 https://github.com/yuweiqian1984-ops/tmey-eye-hospital/settings/pages
+  2. 在 "Source" 部分选择 `Deploy from a branch`
+  3. Branch 选择 `main`，Folder 选择 `/(root)`
+  4. 点击 Save 保存
+  5. 等待 GitHub Actions 自动构建和部署（约1-2分钟）
+- 完成后访问地址：
+  - 官网：https://yuweiqian1984-ops.github.io/tmey-eye-hospital
+  - 后台：https://yuweiqian1984-ops.github.io/tmey-eye-hospital/admin
 
 ### 2. 后续优化建议
 - [ ] 绑定自定义域名（如 www.tmeyeye.com）
@@ -106,4 +110,4 @@
 
 ---
 创建时间：2026-08-03
-最后更新：2026-08-07
+最后更新：2026-09-07
