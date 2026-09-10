@@ -47,6 +47,15 @@ const departments = [
   },
 ];
 
+interface Message {
+  id: string;
+  name: string;
+  phone: string;
+  department: string;
+  message: string;
+  createdAt: string;
+}
+
 // 首页
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
@@ -71,7 +80,17 @@ export default function Home() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // 这里预留 EmailJS 集成接口
+    
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      ...formData,
+      createdAt: new Date().toISOString(),
+    };
+    
+    // 保存到 localStorage
+    const existing: Message[] = JSON.parse(localStorage.getItem("hospital_messages") || "[]");
+    localStorage.setItem("hospital_messages", JSON.stringify([newMessage, ...existing]));
+    
     setSubmitStatus("success");
     setTimeout(() => setSubmitStatus("idle"), 3000);
     setFormData({ name: "", phone: "", department: "", message: "" });
@@ -102,11 +121,10 @@ export default function Home() {
                   {item === "contact" && "联系我们"}
                 </button>
               ))}
-              <a href="tel:13396376116" className="btn-primary text-sm px-4 py-2">
+              <a href="tel:13396376119" className="btn-primary text-sm px-4 py-2">
                 📞 预约挂号
               </a>
             </div>
-            {/* 移动端菜单按钮 */}
             <button className="md:hidden p-2" onClick={() => scrollTo("home")}>
               <span className={`text-2xl ${scrolled ? "text-gray-700" : "text-white"}`}>☰</span>
             </button>
@@ -143,22 +161,22 @@ export default function Home() {
             <button onClick={() => scrollTo("departments")} className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-yellow-300 hover:text-blue-800 transition-all">
               了解科室
             </button>
-            <a href="tel:13396376116" className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all">
+            <a href="tel:13396376119" className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all">
               📞 立即咨询
             </a>
           </div>
           <div className="mt-12 flex justify-center gap-8 text-white/80">
             <div className="text-center">
-              <div className="text-3xl font-bold text-yellow-300">20+</div>
-              <div className="text-sm">年专注眼科</div>
+              <div className="text-3xl font-bold text-yellow-300">10+</div>
+              <div className="text-sm">年建院</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-yellow-300">10万+</div>
-              <div className="text-sm">成功手术案例</div>
+              <div className="text-3xl font-bold text-yellow-300">5万+</div>
+              <div className="text-sm">成功手术</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-yellow-300">98%</div>
-              <div className="text-sm">患者满意度</div>
+              <div className="text-3xl font-bold text-yellow-300">省城专家</div>
+              <div className="text-sm">常年坐诊</div>
             </div>
           </div>
         </div>
@@ -180,41 +198,37 @@ export default function Home() {
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-6">专业眼科医疗机构</h3>
               <p className="text-gray-600 mb-4 leading-relaxed">
-                滕州启明眼科医院是一家集医疗、教学、科研、预防为一体的现代化眼科医院。
-                医院引进了德国蔡司全飞秒激光系统、美国爱尔康超声乳化仪等国际先进设备，
-                为患者提供精准、安全、舒适的眼科诊疗服务。
+                滕州启明眼科医院始建于10多年前，是一家专注于眼科诊疗的专业医疗机构。
+                医院拥有先进的眼科诊疗设备，汇聚了省城三甲医院专家常年坐诊。
               </p>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                医院现有眼科专家十余名，其中主任医师3名，副主任医师5名，
-                具备丰富的临床经验，年均完成各类眼科手术数万例。
+              <p className="text-gray-600 mb-4 leading-relaxed">
+                累计完成手术5万+例，涵盖近视矫正、白内障、青光眼等各类眼病治疗。
+                我们以精湛的医术、优质的服务，守护每一位患者的清晰视界。
               </p>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { icon: "✅", text: "德国蔡司全飞秒" },
-                  { icon: "✅", text: "专业眼科团队" },
-                  { icon: "✅", text: "温馨就诊环境" },
-                  { icon: "✅", text: "透明合理收费" },
-                ].map((item) => (
-                  <div key={item.text} className="flex items-center gap-2 text-gray-700">
-                    <span>{item.icon}</span>
-                    <span className="text-sm">{item.text}</span>
-                  </div>
-                ))}
+              <div className="grid grid-cols-3 gap-4 mt-8">
+                <div className="text-center p-4 bg-blue-50 rounded-lg">
+                  <div className="text-2xl font-bold text-blue-600">10+</div>
+                  <div className="text-sm text-gray-600">年建院历史</div>
+                </div>
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600">5万+</div>
+                  <div className="text-sm text-gray-600">成功手术</div>
+                </div>
+                <div className="text-center p-4 bg-purple-50 rounded-lg">
+                  <div className="text-2xl font-bold text-purple-600">省城专家</div>
+                  <div className="text-sm text-gray-600">常年坐诊</div>
+                </div>
               </div>
             </div>
-            <div className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl p-8">
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { num: "20+", label: "年眼科经验" },
-                  { num: "10万+", label: "成功手术" },
-                  { num: "50万+", label: "服务患者" },
-                  { num: "98%", label: "满意率" },
-                ].map((stat) => (
-                  <div key={stat.label} className="bg-white rounded-xl p-4 text-center shadow-sm">
-                    <div className="text-2xl font-bold text-blue-600">{stat.num}</div>
-                    <div className="text-sm text-gray-500">{stat.label}</div>
-                  </div>
-                ))}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-teal-400 rounded-2xl transform rotate-3 opacity-20"></div>
+              <div className="relative bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl p-8">
+                <div className="text-6xl text-center mb-4">👁️</div>
+                <h4 className="text-center font-bold text-gray-900 mb-2">专业设备 · 专家团队</h4>
+                <p className="text-center text-gray-600 text-sm">
+                  引进国际先进眼科诊疗设备<br />
+                  省城三甲医院专家常年坐诊
+                </p>
               </div>
             </div>
           </div>
@@ -298,7 +312,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900">咨询热线</h4>
-                    <p className="text-blue-600 font-medium">133-9637-6116</p>
+                    <p className="text-blue-600 font-medium">133-9637-6119</p>
                     <p className="text-sm text-gray-500">于主任</p>
                   </div>
                 </div>
@@ -308,7 +322,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900">医院地址</h4>
-                    <p className="text-gray-600">山东省滕州市</p>
+                    <p className="text-gray-600">山东省滕州市学院路2899号</p>
                     <p className="text-sm text-gray-500">（具体地址请咨询电话确认）</p>
                   </div>
                 </div>
@@ -359,11 +373,11 @@ export default function Home() {
                     className="form-input"
                   >
                     <option value="">请选择咨询项目</option>
-                    <option value="refractive">屈光手术（近视矫正）</option>
-                    <option value="cataract">白内障手术</option>
-                    <option value="glaucoma">青光眼诊疗</option>
-                    <option value="optometry">眼视光（验光配镜）</option>
-                    <option value="other">其他咨询</option>
+                    <option value="屈光手术">屈光手术（近视矫正）</option>
+                    <option value="白内障">白内障手术</option>
+                    <option value="青光眼">青光眼诊疗</option>
+                    <option value="眼视光">眼视光（验光配镜）</option>
+                    <option value="其他">其他咨询</option>
                   </select>
                 </div>
                 <div>
@@ -380,7 +394,7 @@ export default function Home() {
                   type="submit"
                   className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                 >
-                  {submitStatus === "success" ? "✓ 提交成功" : "提交咨询"}
+                  {submitStatus === "success" ? "✓ 提交成功" : submitStatus === "error" ? "✗ 提交失败，请重试" : "提交咨询"}
                 </button>
                 <p className="text-xs text-gray-500 text-center">
                   我们承诺保护您的个人信息安全，仅用于医疗服务预约
@@ -413,9 +427,10 @@ export default function Home() {
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">联系方式</h4>
-              <p className="text-sm mb-2">📞 咨询热线：133-9637-6116</p>
+              <p className="text-sm mb-2">📞 咨询热线：133-9637-6119</p>
               <p className="text-sm mb-2">👤 联系人：于主任</p>
-              <p className="text-sm">📍 地址：山东省滕州市</p>
+              <p className="text-sm">📍 地址：山东省滕州市学院路2899号</p>
+              <a href="/admin" className="text-xs text-gray-500 hover:text-gray-300 mt-2 inline-block">管理后台</a>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
