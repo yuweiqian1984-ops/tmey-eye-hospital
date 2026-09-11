@@ -15,8 +15,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
-      - uses: nttLD/netlify-action@v1
-        with:
-          netlify-auth-token: ${{ secrets.NETLIFY_TOKEN }}
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
-          publish-dir: ./out
+      - run: npx netlify-cli deploy --prod --dir=out --site=$NETLIFY_SITE_ID --auth=$NETLIFY_TOKEN
+        env:
+          NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
