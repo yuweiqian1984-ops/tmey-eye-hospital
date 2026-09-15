@@ -62,3 +62,20 @@
 2. 添加百度统计/Google Analytics
 3. 优化 SEO 和 Meta 标签
 4. 添加在线地图（医院位置）
+
+## 🔑 JSONBin 配置说明
+
+留言数据存储使用 JSONBin.io 免费服务，需要配置：
+
+1. 访问 https://jsonbin.io/register 注册免费账号
+2. 登录后创建新 Bin（Create Bin），内容留空即可
+3. 复制 API Key（Settings → API Keys）
+4. 复制 Bin ID（URL 中的 ID，格式如 `xxxxxx`）
+5. 在项目根目录创建 `.env.local` 文件，填入：
+   ```
+   NEXT_PUBLIC_JSONBIN_KEY=你的API_Key
+   NEXT_PUBLIC_JSONBIN_ID=你的Bin_ID
+   ```
+6. 重新推送代码触发部署
+
+**重要：`.env.local` 在 `.gitignore` 中，不会上传到 GitHub**
