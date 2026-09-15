@@ -60,13 +60,6 @@ interface Message {
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [activeDept, setActiveDept] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    department: "",
-    message: "",
-  });
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -76,24 +69,6 @@ export default function Home() {
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      ...formData,
-      createdAt: new Date().toISOString(),
-    };
-    
-    // 保存到 localStorage
-    const existing: Message[] = JSON.parse(localStorage.getItem("hospital_messages") || "[]");
-    localStorage.setItem("hospital_messages", JSON.stringify([newMessage, ...existing]));
-    
-    setSubmitStatus("success");
-    setTimeout(() => setSubmitStatus("idle"), 3000);
-    setFormData({ name: "", phone: "", department: "", message: "" });
   };
 
   return (
@@ -342,14 +317,15 @@ export default function Home() {
             {/* 表单 */}
             <div className="bg-gray-50 rounded-2xl p-8">
               <h3 className="text-xl font-bold text-gray-900 mb-6">在线咨询</h3>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form action="https://formsubmit.co/13396376119@163.com" method="POST" className="space-y-4">
+                <input type="hidden" name="_subject" value="新咨询留言 - 滕州启明眼科医院"/>
+                <input type="hidden" name="_captcha" value="false"/>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">您的姓名 *</label>
                   <input
                     type="text"
+                    name="name"
                     required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="form-input"
                     placeholder="请输入您的姓名"
                   />
@@ -358,9 +334,8 @@ export default function Home() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">联系电话 *</label>
                   <input
                     type="tel"
+                    name="phone"
                     required
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="form-input"
                     placeholder="请输入您的手机号"
                   />
@@ -368,8 +343,7 @@ export default function Home() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">咨询项目</label>
                   <select
-                    value={formData.department}
-                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                    name="department"
                     className="form-input"
                   >
                     <option value="">请选择咨询项目</option>
@@ -383,9 +357,8 @@ export default function Home() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">咨询内容</label>
                   <textarea
+                    name="message"
                     rows={4}
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="form-input"
                     placeholder="请描述您的眼部情况或咨询内容..."
                   ></textarea>
@@ -394,7 +367,7 @@ export default function Home() {
                   type="submit"
                   className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                 >
-                  {submitStatus === "success" ? "✓ 提交成功" : submitStatus === "error" ? "✗ 提交失败，请重试" : "提交咨询"}
+                  提交咨询
                 </button>
                 <p className="text-xs text-gray-500 text-center">
                   我们承诺保护您的个人信息安全，仅用于医疗服务预约

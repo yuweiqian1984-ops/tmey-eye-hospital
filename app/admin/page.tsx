@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { getMessages, deleteMessage as apiDeleteMessage, clearAllMessages } from "../../lib/storage";
 
 interface Message {
   id: string;
@@ -17,24 +18,25 @@ export default function AdminPage() {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    // 从 localStorage 获取数据
-    const stored = localStorage.getItem("hospital_messages");
-    if (stored) {
-      setMessages(JSON.parse(stored));
+    async function loadMessages() {
+      const msgs = await getMessages();
+      setMessages(msgs);
+      setLoading(false);
     }
-    setLoading(false);
+    loadMessages();
   }, []);
 
-  const deleteMessage = (id: string) => {
-    const updated = messages.filter((m) => m.id !== id);
-    setMessages(updated);
-    localStorage.setItem("hospital_messages", JSON.stringify(updated));
+  const deleteMessage = async (id: string) => {
+    if (await apiDeleteMessage(id)) {
+      setMessages(messages.filter((m) => m.id !== id));
+    }
   };
 
-  const clearAll = () => {
+  const clearAll = async () => {
     if (confirm("确定要清空所有咨询记录吗？")) {
-      setMessages([]);
-      localStorage.removeItem("hospital_messages");
+      if (await clearAllMessages()) {
+        setMessages([]);
+      }
     }
   };
 
