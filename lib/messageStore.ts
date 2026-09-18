@@ -1,3 +1,4 @@
+// version: 2
 const GITHUB_MESSAGES_URL =
   "https://yuweiqian1984-ops.github.io/tmey-eye-hospital/data/messages.json";
 const JSONBIN_KEY = process.env.NEXT_PUBLIC_JSONBIN_KEY || "";
