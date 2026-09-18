@@ -16,8 +16,10 @@ export default function AdminPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     async function loadMessages() {
       const msgs = await getMessages();
       setMessages(msgs);
@@ -46,6 +48,14 @@ export default function AdminPage() {
       m.phone.includes(filter) ||
       m.department.includes(filter)
   );
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-500">加载中...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

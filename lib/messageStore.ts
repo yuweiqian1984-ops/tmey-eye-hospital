@@ -1,8 +1,5 @@
-// version: 2
-const GITHUB_MESSAGES_URL =
-  "https://yuweiqian1984-ops.github.io/tmey-eye-hospital/data/messages.json";
-const JSONBIN_KEY = process.env.NEXT_PUBLIC_JSONBIN_KEY || "";
-const JSONBIN_ID = process.env.NEXT_PUBLIC_JSONBIN_ID || "";
+// 消息存储 - 使用 localStorage 作为持久化层（免费静态站点方案）
+const STORAGE_KEY = "tmey_messages";
 
 export interface Message {
   id: string;
@@ -13,86 +10,59 @@ export interface Message {
   createdAt: string;
 }
 
-export async function getMessages(): Promise<Message[]> {
-  // 优先使用 JSONBin，其次回退到 GitHub Pages 上的静态文件
-  if (JSONBIN_ID && JSONBIN_KEY) {
-    try {
-      const res = await fetch(
-        `https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest`,
-        { headers: { "X-Master-Key": JSONBIN_KEY } }
-      );
-      const data = await res.json();
-      if (data.record?.messages?.length) return data.record.messages;
-    } catch {}
-  }
+function getStorage(): Message[] {
+  if (typeof window === "undefined") return [];
   try {
-    const res = await fetch(GITHUB_MESSAGES_URL + "?t=" + Date.now());
-    if (res.ok) {
-      const data = await res.json();
-      return Array.isArray(data) ? data : [];
-    }
-  } catch {}
-  return [];
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function setStorage(messages: Message[]): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+}
+
+export async function getMessages(): Promise<Message[]> {
+  return new Promise((resolve) => {
+    const msgs = getStorage();
+    setTimeout(() => resolve(msgs), 300);
+  });
 }
 
 export async function addMessage(msg: Message): Promise<boolean> {
-  // JSONBin 优先（需要配置 API Key）
-  if (JSONBIN_ID && JSONBIN_KEY) {
+  return new Promise((resolve) => {
     try {
-      const existing = await getMessages();
-      const updated = [msg, ...existing];
-      const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Master-Key": JSONBIN_KEY,
-        },
-        body: JSON.stringify({ messages: updated }),
-      });
-      return res.ok;
+      const existing = getStorage();
+      setStorage([msg, ...existing]);
+      resolve(true);
     } catch {
-      return false;
+      resolve(false);
     }
-  }
-  return false;
+  });
 }
 
 export async function deleteMessage(id: string): Promise<boolean> {
-  if (JSONBIN_ID && JSONBIN_KEY) {
+  return new Promise((resolve) => {
     try {
-      const existing = await getMessages();
-      const updated = existing.filter((m) => m.id !== id);
-      const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Master-Key": JSONBIN_KEY,
-        },
-        body: JSON.stringify({ messages: updated }),
-      });
-      return res.ok;
+      const existing = getStorage();
+      setStorage(existing.filter((m) => m.id !== id));
+      resolve(true);
     } catch {
-      return false;
+      resolve(false);
     }
-  }
-  return false;
+  });
 }
 
 export async function clearAllMessages(): Promise<boolean> {
-  if (JSONBIN_ID && JSONBIN_KEY) {
+  return new Promise((resolve) => {
     try {
-      const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Master-Key": JSONBIN_KEY,
-        },
-        body: JSON.stringify({ messages: [] }),
-      });
-      return res.ok;
+      setStorage([]);
+      resolve(true);
     } catch {
-      return false;
+      resolve(false);
     }
-  }
-  return false;
+  });
 }
