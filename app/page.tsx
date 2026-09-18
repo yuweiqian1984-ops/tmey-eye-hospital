@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { addMessage } from "../lib/messageStore";
 
 // 科室数据
 const departments = [
@@ -317,7 +318,24 @@ export default function Home() {
             {/* 表单 */}
             <div className="bg-gray-50 rounded-2xl p-8">
               <h3 className="text-xl font-bold text-gray-900 mb-6">在线咨询</h3>
-              <form action="https://formsubmit.co/13396376119@163.com" method="POST" className="space-y-4">
+              <form
+  action="https://formsubmit.co/13396376119@163.com"
+  method="POST"
+  className="space-y-4"
+  onSubmit={async (e) => {
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const payload = {
+      id: Date.now().toString(),
+      name: data.get("name") as string,
+      phone: data.get("phone") as string,
+      department: (data.get("department") as string) || "其他",
+      message: data.get("message") as string || "",
+      createdAt: new Date().toISOString(),
+    };
+    await addMessage(payload);
+  }}
+>
                 <input type="hidden" name="_subject" value="新咨询留言 - 滕州启明眼科医院"/>
                 <input type="hidden" name="_captcha" value="false"/>
                 <div>

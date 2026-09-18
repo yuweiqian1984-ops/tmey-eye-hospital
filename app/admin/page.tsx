@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getMessages, deleteMessage as apiDeleteMessage, clearAllMessages } from "../../lib/storage";
+import { getMessages, deleteMessage as apiDeleteMessage, clearAllMessages } from "../../lib/messageStore";
 
 interface Message {
   id: string;
