@@ -118,7 +118,7 @@ export default function Home() {
               </span>
             </div>
             <div className="hidden md:flex items-center gap-8">
-              {["home", "about", "departments", "contact"].map((item) => (
+              {["home", "about", "departments", "team", "equipment", "contact"].map((item) => (
                 <button
                   key={item}
                   onClick={() => scrollTo(item)}
@@ -132,6 +132,8 @@ export default function Home() {
                   {item === "about" && "关于我们"}
                   {item === "departments" && "科室介绍"}
                   {item === "contact" && "联系我们"}
+                  {item === "team" && "专家团队"}
+                  {item === "equipment" && "先进设备"}
                 </button>
               ))}
               <a
@@ -437,6 +439,8 @@ export default function Home() {
                 <li><button onClick={() => scrollTo("home")} className="hover:text-white">首页</button></li>
                 <li><button onClick={() => scrollTo("about")} className="hover:text-white">关于我们</button></li>
                 <li><button onClick={() => scrollTo("departments")} className="hover:text-white">科室介绍</button></li>
+                <li><a href="/team" className="hover:text-white">专家团队</a></li>
+                <li><a href="/#equipment" className="hover:text-white">先进设备</a></li>
                 <li><button onClick={() => scrollTo("contact")} className="hover:text-white">联系我们</button></li>
               </ul>
             </div>
