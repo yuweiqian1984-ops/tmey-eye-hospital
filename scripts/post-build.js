@@ -20,11 +20,13 @@ ensureIndexHtml(path.join(outDir, 'equipment.html'), path.join(outDir, 'equipmen
 ensureIndexHtml(path.join(outDir, 'team.html'), path.join(outDir, 'team', 'index.html'));
 ensureIndexHtml(path.join(outDir, 'admin.html'), path.join(outDir, 'admin', 'index.html'));
 
-// Handle department sub-pages
+// Handle department sub-pages - files are HTML, need to create dirs
 const departmentsDir = path.join(outDir, 'departments');
 if (fs.existsSync(departmentsDir)) {
-  const deptDirs = fs.readdirSync(departmentsDir).filter(d => fs.statSync(path.join(departmentsDir, d)).isDirectory());
-  deptDirs.forEach(dept => {
+  const htmlFiles = fs.readdirSync(departmentsDir)
+    .filter(f => f.endsWith('.html'))
+    .map(f => f.replace('.html', ''));
+  htmlFiles.forEach(dept => {
     const htmlPath = path.join(departmentsDir, dept + '.html');
     const indexPath = path.join(departmentsDir, dept, 'index.html');
     ensureIndexHtml(htmlPath, indexPath);
