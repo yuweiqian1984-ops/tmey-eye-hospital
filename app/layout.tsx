@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
-
+import { Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 
+const noto = Noto_Sans_SC({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"] });
+
 export const metadata: Metadata = {
-  title: "滕州启明眼科医院 - 专业眼科医疗机构",
-  description: "滕州启明眼科医院，专注于屈光手术、综合眼病、眼视光等眼科医疗服务。全飞秒激光手术、ICL晶体植入、白内障、青光眼等专业眼科诊疗。",
+  title: "滕州启明眼科医院_滕州眼科_滕州眼病专家_滕州启明眼科医院",
+  description: "滕州启明眼科医院是按三级标准建设的专业眼科医院，开放床位80张。拥有爱尔康超乳、玻切，莱卡、蔡司手术显微镜，海德堡OCT、眼底造影，光太眼科A/B超，拓普康裂隙灯、眼压计、综合验光仪。",
+  keywords: "滕州眼科医院,滕州眼科,滕州眼病专家,滕州启明眼科,近视手术,全飞秒,白内障,青光眼",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh-CN" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="zh-CN" className={noto.className}>
+      <body className="min-h-screen flex flex-col bg-white text-gray-800">{children}</body>
     </html>
   );
 }

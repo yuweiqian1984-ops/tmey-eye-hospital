@@ -1,108 +1,96 @@
-"use client";
+import Link from "next/link";
 
 export default function DryEyePage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <a href="/" className="flex items-center gap-2">
-              <span className="text-2xl">👁️</span>
-              <span className="font-bold text-lg text-blue-600">滕州启明眼科医院</span>
-            </a>
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center"><span className="text-white text-sm">👁</span></div>
+              <span className="font-bold text-lg text-blue-700">滕州启明眼科医院</span>
+            </Link>
             <div className="hidden md:flex items-center gap-8">
-              <a href="/" className="text-gray-700 hover:text-blue-600 font-medium">首页</a>
-              <a href="/about" className="text-gray-700 hover:text-blue-600 font-medium">关于我们</a>
-              <a href="/team" className="text-gray-700 hover:text-blue-600 font-medium">专家团队</a>
-              <a href="/equipment" className="text-gray-700 hover:text-blue-600 font-medium">先进设备</a>
-              <a href="/#contact" className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">在线咨询</a>
+              <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium text-sm">首页</Link>
+              <Link href="/about" className="text-gray-700 hover:text-blue-600 font-medium text-sm">医院概况</Link>
+              <span className="text-blue-600 font-medium text-sm">干眼科</span>
+              <Link href="/team" className="text-gray-700 hover:text-blue-600 font-medium text-sm">专家团队</Link>
+              <Link href="/equipment" className="text-gray-700 hover:text-blue-600 font-medium text-sm">先进设备</Link>
+              <Link href="/admin" className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">管理后台</Link>
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="pt-16 bg-gradient-to-br from-blue-600 via-blue-700 to-teal-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-16 text-center">
+      <div className="pt-24 pb-16 bg-gradient-to-br from-sky-700 to-blue-600 text-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="breadcrumb text-white/70 mb-4">
+            <Link href="/" className="hover:text-white">首页</Link> &gt; 干眼科
+          </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">干眼科</h1>
-          <p className="text-xl text-white/80">干眼症综合诊疗 · 让眼睛重新水润</p>
+          <p className="text-xl text-white/80">专业诊治干眼症、角膜炎等眼表疾病</p>
         </div>
       </div>
 
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">什么是干眼症？</h2>
-              <p className="text-gray-600 leading-relaxed mb-6">
-                干眼症是指泪液的质或量异常，导致泪膜不稳定或眼表损害，引起眼部不适症状的一组疾病。现代人长时间使用电子产品，干眼症发病率逐年上升。
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">科室介绍</h2>
+              <p className="text-gray-700 leading-relaxed mb-8">
+                干眼科专门诊治干眼症、角膜炎、结膜炎、翼状胬肉等眼表疾病。
+                夏季用眼过度、长时间看屏幕是干眼症高发原因。
               </p>
 
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">干眼症的症状</h2>
-              <ul className="space-y-3 mb-8">
-                {["眼睛干涩、异物感", "眼疲劳、烧灼感", "畏光、流泪", "视力波动", "眼红、分泌物增多"].map((sym) => (
-                  <li key={sym} className="flex items-center gap-3">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></span>
-                    <span className="text-gray-700">{sym}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">干眼症的成因</h2>
-              <div className="grid md:grid-cols-2 gap-4 mb-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">常见眼表疾病</h2>
+              <div className="space-y-3 mb-8">
                 {[
-                  "长时间使用电子产品，眨眼次数减少",
-                  "环境干燥、空调房久待",
-                  "年龄增长，泪液分泌减少",
-                  "自身免疫性疾病",
-                  "眼部手术后",
-                  "长期使用某些药物",
-                ].map((cause) => (
-                  <div key={cause} className="bg-gray-50 rounded-xl p-4 flex items-center gap-3">
-                    <span className="text-red-400">⚠</span>
-                    <span className="text-gray-700 text-sm">{cause}</span>
+                  { title: "干眼症", desc: "眼睛干涩、异物感、烧灼感，常见于长时间看屏幕者" },
+                  { title: "翼状胬肉", desc: "眼球表面长出三角形肉质组织，影响外观和视力" },
+                  { title: "角膜炎", desc: "角膜感染，眼红、疼痛、畏光、流泪" },
+                  { title: "结膜炎", desc: "俗称红眼病，眼红、分泌物增多" },
+                ].map((item) => (
+                  <div key={item.title} className="bg-sky-50 rounded-lg p-4">
+                    <div className="font-semibold text-gray-900 mb-1">{item.title}</div>
+                    <div className="text-sm text-gray-600">{item.desc}</div>
                   </div>
                 ))}
               </div>
 
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">干眼症的治疗</h2>
-              <div className="space-y-4">
-                {[
-                  { title: "人工泪液", desc: "缓解干涩症状，适合轻中度干眼" },
-                  { title: "泪点栓塞", desc: "堵塞泪点，延长泪液在眼表的停留时间" },
-                  { title: "强脉冲光治疗", desc: "改善睑板腺功能，适合蒸发过强型干眼" },
-                  { title: "湿房镜", desc: "创造湿润环境，减少泪液蒸发" },
-                ].map((treatment) => (
-                  <div key={treatment.title} className="border border-gray-200 rounded-xl p-5">
-                    <h3 className="font-bold text-gray-900 mb-1">{treatment.title}</h3>
-                    <p className="text-sm text-gray-500">{treatment.desc}</p>
-                  </div>
-                ))}
+              <h2 className="text-xl font-bold text-gray-900 mb-4">干眼症预防小贴士</h2>
+              <div className="bg-gray-50 rounded-xl p-6">
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li>• 避免长时间看屏幕，每20分钟休息一次</li>
+                  <li>• 使用人工泪液缓解干涩</li>
+                  <li>• 保持室内湿度，避免空调直吹</li>
+                  <li>• 多吃富含维生素A的食物</li>
+                  <li>• 注意眼部清洁，不要揉眼睛</li>
+                </ul>
               </div>
             </div>
 
-            <div>
-              <div className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl p-6 sticky top-24">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">干眼症自查</h3>
-                <p className="text-gray-600 text-sm mb-6">
-                  如果您经常出现眼睛干涩、异物感等症状，建议到院进行专业的干眼症检查。
-                </p>
-                <a href="/#contact" className="block w-full py-3 bg-blue-600 text-white text-center rounded-xl font-semibold hover:bg-blue-700 transition-colors">
-                  预约检查
-                </a>
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <p className="text-sm text-gray-500 mb-2">咨询热线</p>
-                  <p className="text-xl font-bold text-blue-600">133-9637-6119</p>
-                  <p className="text-sm text-gray-500 mt-2">于主任</p>
-                </div>
+            <div className="space-y-6">
+              <div className="bg-gray-50 rounded-xl p-6 border">
+                <h3 className="font-bold text-gray-900 mb-4">相关科普</h3>
+                <ul className="space-y-3">
+                  {["夏季用眼过度小心干眼症找上门", "翼状胬肉手术风险大吗", "隐形眼镜天天戴也容易发生角膜炎", "为什么会患沙眼", "角膜炎会传染吗", "什么是结膜炎?如何治疗?"].map((t) => (
+                    <li key={t}><a href="#" className="text-sm text-gray-600 hover:text-sky-600 line-clamp-1">· {t}</a></li>
+                  ))}
+                </ul>
+              </div>
+              <div className="bg-gradient-to-br from-sky-600 to-blue-600 rounded-xl p-6 text-white">
+                <h3 className="font-bold mb-4">预约检查</h3>
+                <p className="text-white/80 text-sm mb-4">关爱眼睛，从干眼筛查开始</p>
+                <Link href="/" className="block w-full py-3 bg-white text-gray-800 rounded-lg text-center font-semibold hover:bg-gray-50">立即咨询</Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <footer className="bg-gray-900 text-gray-400 py-8">
+      <footer className="bg-gray-900 text-gray-400 py-12">
         <div className="max-w-7xl mx-auto px-4 text-center text-sm">
-          <p>© 2026 滕州启明眼科医院</p>
+          <p>版权所有：滕州启明眼科医院 · 鲁ICP备16028524号-1</p>
         </div>
       </footer>
     </div>
