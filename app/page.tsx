@@ -118,24 +118,12 @@ export default function Home() {
               </span>
             </div>
             <div className="hidden md:flex items-center gap-8">
-              {["home", "about", "departments", "team", "equipment", "contact"].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => scrollTo(item)}
-                  className={`font-medium transition-colors ${
-                    scrolled
-                      ? "text-gray-700 hover:text-blue-600"
-                      : "text-white/90 hover:text-white"
-                  }`}
-                >
-                  {item === "home" && "首页"}
-                  {item === "about" && "关于我们"}
-                  {item === "departments" && "科室介绍"}
-                  {item === "contact" && "联系我们"}
-                  {item === "team" && "专家团队"}
-                  {item === "equipment" && "先进设备"}
-                </button>
-              ))}
+              <a href="/" className={`font-medium transition-colors ${scrolled ? "text-gray-700 hover:text-blue-600" : "text-white/90 hover:text-white"}`}>首页</a>
+              <a href="/about" className={`font-medium transition-colors ${scrolled ? "text-gray-700 hover:text-blue-600" : "text-white/90 hover:text-white"}`}>医院概况</a>
+              <a href="/departments/refractive" className={`font-medium transition-colors ${scrolled ? "text-gray-700 hover:text-blue-600" : "text-white/90 hover:text-white"}`}>科室介绍</a>
+              <a href="/team" className={`font-medium transition-colors ${scrolled ? "text-gray-700 hover:text-blue-600" : "text-white/90 hover:text-white"}`}>专家团队</a>
+              <a href="/equipment" className={`font-medium transition-colors ${scrolled ? "text-gray-700 hover:text-blue-600" : "text-white/90 hover:text-white"}`}>先进设备</a>
+              <a href="#contact" className={`font-medium transition-colors ${scrolled ? "text-gray-700 hover:text-blue-600" : "text-white/90 hover:text-white"}`}>联系我们</a>
               <a
                 href="/admin"
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
@@ -436,12 +424,12 @@ export default function Home() {
             <div>
               <h4 className="text-white font-semibold mb-4">快速链接</h4>
               <ul className="space-y-2 text-sm">
-                <li><button onClick={() => scrollTo("home")} className="hover:text-white">首页</button></li>
-                <li><button onClick={() => scrollTo("about")} className="hover:text-white">关于我们</button></li>
-                <li><button onClick={() => scrollTo("departments")} className="hover:text-white">科室介绍</button></li>
+                <li><a href="/" className="hover:text-white">首页</a></li>
+                <li><a href="/about" className="hover:text-white">医院概况</a></li>
+                <li><a href="/departments/refractive" className="hover:text-white">科室介绍</a></li>
                 <li><a href="/team" className="hover:text-white">专家团队</a></li>
-                <li><a href="/#equipment" className="hover:text-white">先进设备</a></li>
-                <li><button onClick={() => scrollTo("contact")} className="hover:text-white">联系我们</button></li>
+                <li><a href="/equipment" className="hover:text-white">先进设备</a></li>
+                <li><a href="#contact" className="hover:text-white">联系我们</a></li>
               </ul>
             </div>
             <div>
