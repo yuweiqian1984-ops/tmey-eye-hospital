@@ -13,8 +13,6 @@ interface Message {
 }
 
 const ADMIN_PASSWORD = "tmey2024!@";
-const GITHUB_REPO = "yuweiqian1984-ops/tmey-eye-hospital";
-const GITHUB_FILE = "data/messages.json";
 
 export default function AdminPage() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -24,20 +22,15 @@ export default function AdminPage() {
   const [passwordInput, setPasswordInput] = useState("");
   const [loginError, setLoginError] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [githubToken, setGithubToken] = useState("");
-  const [showTokenInput, setShowTokenInput] = useState(false);
-  const [tokenSaved, setTokenSaved] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     const saved = sessionStorage.getItem("tmey_admin_auth");
     if (saved === "true") setAuthenticated(true);
-    const token = localStorage.getItem("tmey_github_token");
-    if (token) setGithubToken(token);
-    loadMessages(token || "");
+    loadMessages();
   }, []);
 
-  async function loadMessages(token: string) {
+  async function loadMessages() {
     setLoading(true);
     const msgs = await getMessages();
     setMessages(msgs);
@@ -53,14 +46,6 @@ export default function AdminPage() {
     }
   };
 
-  const handleTokenSave = () => {
-    if (githubToken.trim()) {
-      localStorage.setItem("tmey_github_token", githubToken.trim());
-      setTokenSaved(true);
-      loadMessages(githubToken.trim());
-    }
-  };
-
   const deleteMessage = async (id: string) => {
     if (await apiDeleteMessage(id)) {
       setMessages(messages.filter((m) => m.id !== id));
@@ -73,6 +58,17 @@ export default function AdminPage() {
         setMessages([]);
       }
     }
+  };
+
+  const exportMessages = () => {
+    const dataStr = JSON.stringify(messages, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `咨询记录_${new Date().toLocaleDateString("zh-CN").replace(/\//g, "-")}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const filtered = messages.filter(
@@ -144,6 +140,12 @@ export default function AdminPage() {
             <p className="text-gray-500 mt-1">滕州启明眼科医院后台</p>
           </div>
           <div className="flex gap-3">
+            <button
+              onClick={exportMessages}
+              className="px-4 py-2 text-green-600 hover:text-green-700 border border-green-300 rounded-lg"
+            >
+              导出数据
+            </button>
             <a
               href="/"
               className="px-4 py-2 text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg"
@@ -169,36 +171,6 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* GitHub Token 设置 */}
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium text-blue-900">GitHub Token（可选）</h3>
-              <p className="text-sm text-blue-600 mt-1">
-                填入 GitHub Personal Access Token 可从云端读取留言数据
-              </p>
-              <p className="text-xs text-blue-500 mt-1">
-                获取方式：GitHub → Settings → Developer settings → Personal access tokens → Generate new token → 勾选 repo 权限
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="password"
-                value={githubToken}
-                onChange={(e) => setGithubToken(e.target.value)}
-                placeholder="ghp_xxxxxxxxxxxx"
-                className="px-3 py-2 border border-blue-200 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                onClick={handleTokenSave}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
-              >
-                {tokenSaved ? "已保存" : "保存"}
-              </button>
-            </div>
-          </div>
-        </div>
-
         {/* 统计卡片 */}
         <div className="grid grid-cols-3 gap-4 mb-8">
           <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -207,13 +179,13 @@ export default function AdminPage() {
           </div>
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="text-3xl font-bold text-green-600">
-              {messages.filter((m) => m.department === "屈光手术").length}
+              {messages.filter((m) => m.department?.includes("屈光")).length}
             </div>
             <div className="text-gray-500 mt-1">屈光手术咨询</div>
           </div>
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="text-3xl font-bold text-purple-600">
-              {messages.filter((m) => m.department === "眼视光").length}
+              {messages.filter((m) => m.department?.includes("眼视光") || m.department?.includes("视光")).length}
             </div>
             <div className="text-gray-500 mt-1">眼视光咨询</div>
           </div>
@@ -235,9 +207,7 @@ export default function AdminPage() {
           <div className="text-center py-12 text-gray-500">加载中...</div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-12 text-gray-500 bg-white rounded-xl">
-            {messages.length === 0 && !githubToken
-              ? "暂无咨询记录\n\n提示：填入 GitHub Token 后可从云端读取数据"
-              : "暂无咨询记录"}
+            {messages.length === 0 ? "暂无咨询记录，客户提交的留言将显示在这里" : "暂无匹配的咨询记录"}
           </div>
         ) : (
           <div className="bg-white rounded-xl shadow-sm overflow-hidden">
