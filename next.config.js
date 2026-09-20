@@ -2,11 +2,13 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
+  webpack: (config) => {
+    config.cache = false;
+    return config;
+  },
   images: {
     unoptimized: true,
   },
-  // GitHub Pages 项目页需要 basePath
-  basePath: '/tmey-eye-hospital',
 };
 
 module.exports = nextConfig;

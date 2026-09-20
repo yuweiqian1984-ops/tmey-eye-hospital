@@ -12,14 +12,21 @@ interface Message {
   createdAt: string;
 }
 
+const ADMIN_PASSWORD = "tmey2024!@";
+
 export default function AdminPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
+  const [authenticated, setAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [loginError, setLoginError] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    const saved = sessionStorage.getItem("tmey_admin_auth");
+    if (saved === "true") setAuthenticated(true);
     async function loadMessages() {
       const msgs = await getMessages();
       setMessages(msgs);
@@ -27,6 +34,15 @@ export default function AdminPage() {
     }
     loadMessages();
   }, []);
+
+  const handleLogin = () => {
+    if (passwordInput === ADMIN_PASSWORD) {
+      setAuthenticated(true);
+      sessionStorage.setItem("tmey_admin_auth", "true");
+    } else {
+      setLoginError(true);
+    }
+  };
 
   const deleteMessage = async (id: string) => {
     if (await apiDeleteMessage(id)) {
@@ -57,6 +73,51 @@ export default function AdminPage() {
     );
   }
 
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-sm">
+          <div className="text-center mb-6">
+            <div className="text-4xl mb-3">🔒</div>
+            <h1 className="text-xl font-bold text-gray-900">管理后台登录</h1>
+            <p className="text-gray-500 text-sm mt-1">滕州启明眼科医院</p>
+          </div>
+          <div className="space-y-4">
+            <div>
+              <input
+                type="password"
+                placeholder="请输入管理员密码"
+                value={passwordInput}
+                onChange={(e) => {
+                  setPasswordInput(e.target.value);
+                  setLoginError(false);
+                }}
+                onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                autoFocus
+              />
+              {loginError && (
+                <p className="text-red-500 text-sm mt-1">密码错误，请重试</p>
+              )}
+            </div>
+            <button
+              onClick={handleLogin}
+              className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            >
+              登录
+            </button>
+            <a
+              href="/"
+              className="block text-center text-sm text-gray-400 hover:text-gray-600"
+            >
+              返回网站首页
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 py-12">
@@ -72,6 +133,16 @@ export default function AdminPage() {
             >
               返回网站
             </a>
+            <button
+              onClick={() => {
+                sessionStorage.removeItem("tmey_admin_auth");
+                setAuthenticated(false);
+                setPasswordInput("");
+              }}
+              className="px-4 py-2 text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg"
+            >
+              退出登录
+            </button>
             <button
               onClick={clearAll}
               className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"

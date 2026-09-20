@@ -1,6 +1,40 @@
+"use client";
 import Link from "next/link";
 
-export default function GlaucomaPage() {
+const procedures = [
+  {
+    name: "全飞秒 SMILE 4.0",
+    desc: "德国蔡司VisuMax全飞秒设备，无瓣微创，切口仅2mm，恢复快，适合军警、运动员等特殊职业人群。",
+    suitable: "1000度以内近视，500度以内散光",
+    icon: "🔵",
+  },
+  {
+    name: "全飞秒 SMILE 3.0",
+    desc: "新一代全飞秒技术，飞秒激光波长更短，精度更高，手术时间更短，视觉质量更优。",
+    suitable: "1000度以内近视，500度以内散光",
+    icon: "🔵",
+  },
+  {
+    name: "半飞秒 LASIK",
+    desc: "个性化定制角膜切削方案，适合多种度数，可针对散光、角膜不规则进行精准矫正。",
+    suitable: "1200度以内近视，600度以内散光，600度以内远视",
+    icon: "🟢",
+  },
+  {
+    name: "全激光 TransPRK",
+    desc: "阿玛仕SMART全激光设备，表层手术，无切口无不适，适合角膜较薄者。",
+    suitable: "600度以内近视、远视的薄角膜者",
+    icon: "🟡",
+  },
+  {
+    name: "ICL/PRL晶体植入",
+    desc: "可植入式隐形眼镜，不切削角膜，适合角膜较薄、近视度数较高、不适宜激光手术者。",
+    suitable: "ICL适合1800度以内近视，PRL适合3000度以内近视",
+    icon: "🟣",
+  },
+];
+
+export default function RefractivePage() {
   return (
     <div className="min-h-screen bg-white">
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
@@ -13,7 +47,7 @@ export default function GlaucomaPage() {
             <div className="hidden md:flex items-center gap-8">
               <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium text-sm">首页</Link>
               <Link href="/about" className="text-gray-700 hover:text-blue-600 font-medium text-sm">医院概况</Link>
-              <span className="text-blue-600 font-medium text-sm">青光眼专科</span>
+              <span className="text-blue-600 font-medium text-sm">屈光科</span>
               <Link href="/team" className="text-gray-700 hover:text-blue-600 font-medium text-sm">专家团队</Link>
               <Link href="/equipment" className="text-gray-700 hover:text-blue-600 font-medium text-sm">先进设备</Link>
               <Link href="/admin" className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">管理后台</Link>
@@ -22,75 +56,77 @@ export default function GlaucomaPage() {
         </div>
       </nav>
 
-      <div className="pt-24 pb-16 bg-gradient-to-br from-purple-700 to-violet-600 text-white">
+      <div className="pt-24 pb-16 bg-gradient-to-br from-blue-700 to-cyan-600 text-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="breadcrumb text-white/70 mb-4">
-            <Link href="/" className="hover:text-white">首页</Link> &gt; 青光眼专科
+            <Link href="/" className="hover:text-white">首页</Link> &gt; <Link href="/" className="hover:text-white">科室介绍</Link> &gt; 屈光科
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">青光眼专科</h1>
-          <p className="text-xl text-white/80">莫让一时疏忽，夺走一生光明</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">屈光科</h1>
+          <p className="text-xl text-white/80">启明全方位治近视，助您轻松摘镜</p>
         </div>
       </div>
 
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-8">
+            {/* 左侧内容 */}
             <div className="lg:col-span-2">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">科室介绍</h2>
               <p className="text-gray-700 leading-relaxed mb-8">
-                青光眼是世界首位的不可逆性致盲眼病；一般是由眼内压间断或持续升高而导致视神经损伤的一种眼病；
-                主要表现为病理性眼球内压力升高导致视神经萎缩和进行性视野缺损；
-                40岁以上青光眼患病率为2.3%，致盲率约30%！
+                滕州启明眼科医院屈光科拥有德国蔡司VisuMax全飞秒激光设备、阿玛仕SMART全激光屈光手术设备、
+                纳焦飞秒近视手术设备等国际先进设备，可开展全飞秒SMILE 4.0/3.0、半飞秒LASIK、
+                全激光TransPRK、ICL/PRL晶体植入等多种近视矫正手术。
+              </p>
+              <p className="text-gray-700 leading-relaxed mb-8">
+                医院秉承"一切以患者为中心"的服务理念，为每位患者制定个性化的手术方案，
+                确保手术安全与效果。术前进行全套眼科检查，术后定期复查跟踪，
+                让您安心摘镜，重获清晰视界。
               </p>
 
-              <h2 className="text-xl font-bold text-gray-900 mb-4">四类人最容易得青光眼</h2>
-              <div className="space-y-3 mb-8">
-                {[
-                  "家里有亲属得青光眼的人。由于遗传因素，这类人患青光眼的几率会比其他人高出10倍左右。",
-                  "近视眼和远视眼患者。",
-                  "糖尿病、甲状腺疾病等内分泌疾病患者。",
-                  "工作压力大、生活无规律、容易发脾气、日常情绪波动较大的人。因此，精神因素也是引发青光眼的一大原因。",
-                ].map((item, i) => (
-                  <div key={i} className="bg-purple-50 rounded-lg p-4 flex gap-3">
-                    <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">{i+1}</span>
-                    <span className="text-gray-700 text-sm">{item}</span>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">手术方式对比</h2>
+              <div className="space-y-4">
+                {procedures.map((p) => (
+                  <div key={p.name} className="bg-gray-50 rounded-xl p-6 border hover:border-blue-200 transition-colors">
+                    <div className="flex items-start gap-4">
+                      <div className="text-3xl">{p.icon}</div>
+                      <div className="flex-1">
+                        <h3 className="font-bold text-lg text-gray-900 mb-2">{p.name}</h3>
+                        <p className="text-gray-600 text-sm mb-3">{p.desc}</p>
+                        <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
+                          适合：{p.suitable}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
 
-              <h2 className="text-xl font-bold text-gray-900 mb-4">怎么知道自己得了青光眼</h2>
-              <div className="space-y-3 mb-8">
-                {["眼压升高：正常眼压范围10～21毫米汞柱", "视野变窄，视力减退", "头痛眼胀", "恶心呕吐", "虹视：看灯光时出现外圈橙红，内圈紫蓝，中间挟绿色的彩环现象"].map((item, i) => (
-                  <div key={i} className="bg-gray-50 rounded-lg p-4 flex gap-3">
-                    <span className="text-purple-600 flex-shrink-0">●</span>
-                    <span className="text-gray-700 text-sm">{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="p-6 bg-purple-50 rounded-xl">
-                <h3 className="font-bold text-purple-900 mb-2">保护眼睛三类营养</h3>
-                <ul className="text-purple-700 text-sm space-y-1">
-                  <li>维生素：可多摄取深绿色的蔬菜及各种水果，以补充维生素C</li>
-                  <li>维生素A：动物肝脏、鱼肝油、蛋类等维生素A含量较高</li>
-                  <li>锌与蛋白质：锌可通过食用肝、肾、海产品、乳类、谷类、豆类补充</li>
-                </ul>
+              <div className="mt-10 p-6 bg-blue-50 rounded-xl">
+                <h3 className="font-bold text-blue-900 mb-2">摘镜咨询预约电话</h3>
+                <p className="text-blue-700 text-2xl font-bold">153-3632-5533</p>
+                <p className="text-blue-600 text-sm mt-1">（微信同号）</p>
               </div>
             </div>
 
+            {/* 右侧侧边栏 */}
             <div className="space-y-6">
               <div className="bg-gray-50 rounded-xl p-6 border">
                 <h3 className="font-bold text-gray-900 mb-4">相关科普</h3>
                 <ul className="space-y-3">
-                  {["【青光眼】莫让一时疏忽，夺走一生光明", "什么人易患青光眼", "警惕青光眼与白内障相伴相随", ""哭瞎了眼"多指青光眼急性发作", "青光眼患者要怎么滴眼药水", "青光眼患者应该多吃哪些食物"].map((t) => (
-                    <li key={t}><a href="#" className="text-sm text-gray-600 hover:text-purple-600 line-clamp-1">· {t}</a></li>
+                  {["近视手术方式有哪几种？", "全飞秒3.0和4.0的区别", "关于ICL近视手术，这几点你必须了解", "近视手术的误区，你入坑了吗", "白领常用电脑能做近视手术吗", "全飞秒术后注意事项"].map((title) => (
+                    <li key={title}>
+                      <a href="#" className="text-sm text-gray-600 hover:text-blue-600 line-clamp-1">· {title}</a>
+                    </li>
                   ))}
                 </ul>
               </div>
-              <div className="bg-gradient-to-br from-purple-600 to-violet-600 rounded-xl p-6 text-white">
-                <h3 className="font-bold mb-4">预约检查</h3>
-                <p className="text-white/80 text-sm mb-4">早发现早治疗，守护光明</p>
-                <Link href="/" className="block w-full py-3 bg-white text-gray-800 rounded-lg text-center font-semibold hover:bg-gray-50">立即咨询</Link>
+
+              <div className="bg-gradient-to-br from-blue-600 to-teal-600 rounded-xl p-6 text-white">
+                <h3 className="font-bold mb-4">在线咨询</h3>
+                <p className="text-white/80 text-sm mb-4">了解更多近视手术信息</p>
+                <Link href="/" className="block w-full py-3 bg-white text-blue-700 rounded-lg text-center font-semibold hover:bg-blue-50">
+                  立即咨询
+                </Link>
               </div>
             </div>
           </div>
