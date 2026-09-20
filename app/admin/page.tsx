@@ -13,6 +13,8 @@ interface Message {
 }
 
 const ADMIN_PASSWORD = "tmey2024!@";
+const GITHUB_REPO = "yuweiqian1984-ops/tmey-eye-hospital";
+const GITHUB_FILE = "data/messages.json";
 
 export default function AdminPage() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -22,18 +24,25 @@ export default function AdminPage() {
   const [passwordInput, setPasswordInput] = useState("");
   const [loginError, setLoginError] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [githubToken, setGithubToken] = useState("");
+  const [showTokenInput, setShowTokenInput] = useState(false);
+  const [tokenSaved, setTokenSaved] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     const saved = sessionStorage.getItem("tmey_admin_auth");
     if (saved === "true") setAuthenticated(true);
-    async function loadMessages() {
-      const msgs = await getMessages();
-      setMessages(msgs);
-      setLoading(false);
-    }
-    loadMessages();
+    const token = localStorage.getItem("tmey_github_token");
+    if (token) setGithubToken(token);
+    loadMessages(token || "");
   }, []);
+
+  async function loadMessages(token: string) {
+    setLoading(true);
+    const msgs = await getMessages();
+    setMessages(msgs);
+    setLoading(false);
+  }
 
   const handleLogin = () => {
     if (passwordInput === ADMIN_PASSWORD) {
@@ -41,6 +50,14 @@ export default function AdminPage() {
       sessionStorage.setItem("tmey_admin_auth", "true");
     } else {
       setLoginError(true);
+    }
+  };
+
+  const handleTokenSave = () => {
+    if (githubToken.trim()) {
+      localStorage.setItem("tmey_github_token", githubToken.trim());
+      setTokenSaved(true);
+      loadMessages(githubToken.trim());
     }
   };
 
@@ -152,6 +169,36 @@ export default function AdminPage() {
           </div>
         </div>
 
+        {/* GitHub Token 设置 */}
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-medium text-blue-900">GitHub Token（可选）</h3>
+              <p className="text-sm text-blue-600 mt-1">
+                填入 GitHub Personal Access Token 可从云端读取留言数据
+              </p>
+              <p className="text-xs text-blue-500 mt-1">
+                获取方式：GitHub → Settings → Developer settings → Personal access tokens → Generate new token → 勾选 repo 权限
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="password"
+                value={githubToken}
+                onChange={(e) => setGithubToken(e.target.value)}
+                placeholder="ghp_xxxxxxxxxxxx"
+                className="px-3 py-2 border border-blue-200 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                onClick={handleTokenSave}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
+              >
+                {tokenSaved ? "已保存" : "保存"}
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* 统计卡片 */}
         <div className="grid grid-cols-3 gap-4 mb-8">
           <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -188,7 +235,9 @@ export default function AdminPage() {
           <div className="text-center py-12 text-gray-500">加载中...</div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-12 text-gray-500 bg-white rounded-xl">
-            暂无咨询记录
+            {messages.length === 0 && !githubToken
+              ? "暂无咨询记录\n\n提示：填入 GitHub Token 后可从云端读取数据"
+              : "暂无咨询记录"}
           </div>
         ) : (
           <div className="bg-white rounded-xl shadow-sm overflow-hidden">

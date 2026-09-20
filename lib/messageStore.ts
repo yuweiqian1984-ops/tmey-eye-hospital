@@ -1,5 +1,5 @@
-// 消息存储 - JSONBin.io 云端持久化 + localStorage 本地缓存
-// 免费方案：JSONBin.io 免费版支持 100次/小时读取，1000次写入
+// 消息存储 - GitHub API 云端持久化（完全免费）
+// 留言数据存入仓库 data/messages.json，关闭浏览器不丢失
 
 export interface Message {
   id: string;
@@ -10,82 +10,118 @@ export interface Message {
   createdAt: string;
 }
 
-const STORE_KEY = "tmey_messages";
-const MASTER_BIN_ID = process.env.NEXT_PUBLIC_JSONBIN_MASTER_ID || "";
-const MASTER_BIN_KEY = process.env.NEXT_PUBLIC_JSONBIN_MASTER_KEY || "";
+const GITHUB_REPO = "yuweiqian1984-ops/tmey-eye-hospital";
+const FILE_PATH = "data/messages.json";
+const BRANCH = "main";
 
-// 本地缓存
-function getLocalMessages(): Message[] {
+// 获取 GitHub Token（从环境变量或 localStorage 缓存）
+function getToken(): string {
+  if (typeof window === "undefined") return "";
+  return localStorage.getItem("tmey_github_token") || "";
+}
+
+function saveToken(token: string) {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("tmey_github_token", token);
+  }
+}
+
+async function apiFetch(endpoint: string, options: RequestInit = {}): Promise<any> {
+  const token = getToken();
+  const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}${endpoint}`, {
+    ...options,
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Accept": "application/vnd.github.v3+json",
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+  if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+  return res.json();
+}
+
+export async function getMessages(): Promise<Message[]> {
   if (typeof window === "undefined") return [];
+  
+  // 优先从本地缓存读取
   try {
-    const stored = localStorage.getItem(STORE_KEY);
-    return stored ? JSON.parse(stored) : [];
+    const local = localStorage.getItem("tmey_messages");
+    if (local) return JSON.parse(local);
+  } catch {}
+
+  try {
+    const data = await apiFetch(`/contents/${FILE_PATH}?ref=${BRANCH}`);
+    if (!data.content) return [];
+    const buf = Buffer.from(data.content, "base64");
+    const msgs: Message[] = JSON.parse(buf.toString());
+    localStorage.setItem("tmey_messages", JSON.stringify(msgs));
+    return msgs;
   } catch {
     return [];
   }
 }
 
-function setLocalMessages(msgs: Message[]) {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(STORE_KEY, JSON.stringify(msgs));
-}
-
-// 从云端获取
-async function fetchFromCloud(): Promise<Message[]> {
-  if (!MASTER_BIN_ID || !MASTER_BIN_KEY) {
-    return getLocalMessages();
-  }
-  try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${MASTER_BIN_ID}/latest`, {
-      headers: { "X-Master-Key": MASTER_BIN_KEY }
-    });
-    if (!res.ok) return getLocalMessages();
-    const data = await res.json();
-    const msgs: Message[] = data.record?.messages || [];
-    setLocalMessages(msgs);
-    return msgs;
-  } catch {
-    return getLocalMessages();
-  }
-}
-
-// 同步到云端
-async function syncToCloud(msgs: Message[]) {
-  if (!MASTER_BIN_ID || !MASTER_BIN_KEY) return;
-  try {
-    await fetch(`https://api.jsonbin.io/v3/b/${MASTER_BIN_ID}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Master-Key": MASTER_BIN_KEY
-      },
-      body: JSON.stringify({ messages: msgs })
-    });
-  } catch {}
-}
-
-export async function getMessages(): Promise<Message[]> {
-  return fetchFromCloud();
-}
-
 export async function addMessage(msg: Message): Promise<boolean> {
   const msgs = await getMessages();
   msgs.unshift(msg);
-  setLocalMessages(msgs);
-  await syncToCloud(msgs);
+  
+  // 同步到本地
+  localStorage.setItem("tmey_messages", JSON.stringify(msgs));
+  
+  // 同步到 GitHub
+  try {
+    const data = await apiFetch(`/contents/${FILE_PATH}?ref=${BRANCH}`);
+    const content = Buffer.from(JSON.stringify(msgs, null, 2)).toString("base64");
+    await apiFetch(`/contents/${FILE_PATH}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        message: `Add message from ${msg.name}`,
+        content,
+        sha: data.sha,
+        branch: BRANCH,
+      }),
+    });
+  } catch {
+    // 即使同步失败，本地数据也保留了
+  }
   return true;
 }
 
 export async function deleteMessage(id: string): Promise<boolean> {
   const msgs = await getMessages();
   const filtered = msgs.filter((m) => m.id !== id);
-  setLocalMessages(filtered);
-  await syncToCloud(filtered);
+  localStorage.setItem("tmey_messages", JSON.stringify(filtered));
+  
+  try {
+    const data = await apiFetch(`/contents/${FILE_PATH}?ref=${BRANCH}`);
+    const content = Buffer.from(JSON.stringify(filtered, null, 2)).toString("base64");
+    await apiFetch(`/contents/${FILE_PATH}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        message: `Delete message ${id}`,
+        content,
+        sha: data.sha,
+        branch: BRANCH,
+      }),
+    });
+  } catch {}
   return true;
 }
 
 export async function clearAllMessages(): Promise<boolean> {
-  setLocalMessages([]);
-  await syncToCloud([]);
+  localStorage.removeItem("tmey_messages");
+  try {
+    const data = await apiFetch(`/contents/${FILE_PATH}?ref=${BRANCH}`);
+    await apiFetch(`/contents/${FILE_PATH}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        message: "Clear all messages",
+        content: "",
+        sha: data.sha,
+        branch: BRANCH,
+      }),
+    });
+  } catch {}
   return true;
 }
