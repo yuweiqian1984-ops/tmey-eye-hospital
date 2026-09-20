@@ -1,5 +1,5 @@
-// 消息存储 - 使用 localStorage 作为持久化层（免费静态站点方案）
-const STORAGE_KEY = "tmey_messages";
+// 消息存储 - 使用 Google Sheets 作为持久化后端（免费方案）
+// 需要在Google Sheets中创建脚本并部署为Web App API
 
 export interface Message {
   id: string;
@@ -10,59 +10,71 @@ export interface Message {
   createdAt: string;
 }
 
-function getStorage(): Message[] {
-  if (typeof window === "undefined") return [];
+// Google Apps Script API URL - 用户需要自己创建并填写
+const SHEET_API_URL = "";
+
+export async function getMessages(): Promise<Message[]> {
+  if (!SHEET_API_URL) {
+    // 未配置API时返回空数组
+    return [];
+  }
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
+    const response = await fetch(SHEET_API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "get" }),
+    });
+    const data = await response.json();
+    return data.messages || [];
+  } catch (error) {
+    console.error("获取留言失败:", error);
     return [];
   }
 }
 
-function setStorage(messages: Message[]): void {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-}
-
-export async function getMessages(): Promise<Message[]> {
-  return new Promise((resolve) => {
-    const msgs = getStorage();
-    setTimeout(() => resolve(msgs), 300);
-  });
-}
-
 export async function addMessage(msg: Message): Promise<boolean> {
-  return new Promise((resolve) => {
-    try {
-      const existing = getStorage();
-      setStorage([msg, ...existing]);
-      resolve(true);
-    } catch {
-      resolve(false);
-    }
-  });
+  if (!SHEET_API_URL) {
+    // 未配置API时只发送到FormSubmit，返回true表示前端处理成功
+    return true;
+  }
+  try {
+    const response = await fetch(SHEET_API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "add", ...msg }),
+    });
+    const data = await response.json();
+    return data.success === true;
+  } catch (error) {
+    console.error("添加留言失败:", error);
+    return false;
+  }
 }
 
 export async function deleteMessage(id: string): Promise<boolean> {
-  return new Promise((resolve) => {
-    try {
-      const existing = getStorage();
-      setStorage(existing.filter((m) => m.id !== id));
-      resolve(true);
-    } catch {
-      resolve(false);
-    }
-  });
+  if (!SHEET_API_URL) return false;
+  try {
+    const response = await fetch(SHEET_API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "delete", id }),
+    });
+    const data = await response.json();
+    return data.success === true;
+  } catch (error) {
+    console.error("删除留言失败:", error);
+    return false;
+  }
 }
 
 export async function clearAllMessages(): Promise<boolean> {
-  return new Promise((resolve) => {
-    try {
-      setStorage([]);
-      resolve(true);
-    } catch {
-      resolve(false);
-    }
-  });
+  if (!SHEET_API_URL) return false;
+  try {
+    const response = await fetch(SHEET_API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "clear" }),
+    });
+    const data = await response.json();
+    return data.success === true;
+  } catch (error) {
+    console.error("清空留言失败:", error);
+    return false;
+  }
 }
