@@ -51,12 +51,20 @@ export default function EquipmentPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {equipment.map((eq) => (
-              <div key={eq.name} className="bg-gray-50 rounded-xl p-6 border hover:border-blue-200 hover:shadow-md transition-all">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl mb-4">
-                  🔬
+              <div key={eq.name} className="bg-gray-50 rounded-xl overflow-hidden border hover:border-blue-200 hover:shadow-md transition-all">
+                {eq.image ? (
+                  <div className="aspect-video overflow-hidden bg-gray-100">
+                    <img src={eq.image} alt={eq.name} className="w-full h-full object-cover" loading="lazy" />
+                  </div>
+                ) : (
+                  <div className="aspect-video bg-blue-50 flex items-center justify-center">
+                    <span className="text-4xl">🔬</span>
+                  </div>
+                )}
+                <div className="p-4">
+                  <h3 className="font-bold text-gray-900 mb-1">{eq.name}</h3>
+                  <span className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">{eq.category}</span>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2">{eq.name}</h3>
-                <span className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">{eq.category}</span>
               </div>
             ))}
           </div>
