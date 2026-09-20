@@ -1,5 +1,5 @@
-// 消息存储 - 使用 localStorage + FormSubmit（免费方案）
-// localStorage 保证浏览器内数据持久化，FormSubmit 发送邮件通知
+// 消息存储 - localStorage 本地持久化
+// 留言数据保存在浏览器 localStorage 中，关闭浏览器不丢失
 
 export interface Message {
   id: string;
@@ -14,6 +14,7 @@ const STORAGE_KEY = "tmey_messages";
 
 export async function getMessages(): Promise<Message[]> {
   if (typeof window === "undefined") return [];
+  
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     return stored ? JSON.parse(stored) : [];
