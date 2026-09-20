@@ -103,7 +103,7 @@ export default function RefractivePage() {
 
               <div className="mt-10 p-6 bg-blue-50 rounded-xl">
                 <h3 className="font-bold text-blue-900 mb-2">摘镜咨询预约电话</h3>
-                <p className="text-blue-700 text-2xl font-bold">153-3632-5533</p>
+                <p className="text-blue-700 text-2xl font-bold">133-9637-6119</p>
                 <p className="text-blue-600 text-sm mt-1">（微信同号）</p>
               </div>
             </div>

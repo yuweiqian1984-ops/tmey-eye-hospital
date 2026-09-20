@@ -19,8 +19,11 @@ ensureIndexHtml(path.join(outDir, 'about.html'), path.join(outDir, 'about', 'ind
 ensureIndexHtml(path.join(outDir, 'equipment.html'), path.join(outDir, 'equipment', 'index.html'));
 ensureIndexHtml(path.join(outDir, 'team.html'), path.join(outDir, 'team', 'index.html'));
 ensureIndexHtml(path.join(outDir, 'admin.html'), path.join(outDir, 'admin', 'index.html'));
+ensureIndexHtml(path.join(outDir, 'directions.html'), path.join(outDir, 'directions', 'index.html'));
+ensureIndexHtml(path.join(outDir, 'environment.html'), path.join(outDir, 'environment', 'index.html'));
+ensureIndexHtml(path.join(outDir, 'tech.html'), path.join(outDir, 'tech', 'index.html'));
 
-// Handle department sub-pages - files are HTML, need to create dirs
+// Handle department sub-pages
 const departmentsDir = path.join(outDir, 'departments');
 if (fs.existsSync(departmentsDir)) {
   const htmlFiles = fs.readdirSync(departmentsDir)
