@@ -286,10 +286,10 @@ export const hospitalIntro = `滕州启明眼科医院是枣庄地区按三级�
 // 温馨环境图片
 export const environmentPhotos = [
   { src: "https://www.tzqmyk.com/upload_files/article/327/12_20260916140942_ciqxm.jpg", alt: "屈光科" },
-  { src: "https://www.tzqmyk.com/upload_files/article/327/12_20190217150227_lpucr_jpg.gif", alt: "干眼门诊" },
+  { src: "https://www.tzqmyk.com/upload_files/article/327/12_20190217150227_lpucr.jpg", alt: "干眼门诊" },
   { src: "https://www.tzqmyk.com/upload_files/article/327/12_20260916150920_x5qy6.jpg", alt: "视光中心" },
   { src: "https://www.tzqmyk.com/upload_files/article/327/12_20170724140708_kzb6s.jpg", alt: "手术室" },
-  { src: "https://www.tzqmyk.com/upload_files/article/327/1_20160718140751_qrcjt_jpg.gif", alt: "病房" },
+  { src: "https://www.tzqmyk.com/upload_files/article/327/1_20160718140751_qrcjt.jpg", alt: "病房" },
   { src: "https://www.tzqmyk.com/upload_files/article/327/12_20260916140944_kelrt.jpg", alt: "走廊" },
   { src: "https://www.tzqmyk.com/upload_files/article/327/12_20220429110437_1bk9y.jpg", alt: "护士站" },
   { src: "https://www.tzqmyk.com/upload_files/article/327/12_20220429110445_teduh.jpg", alt: "视力训练室" },
@@ -299,3 +299,4 @@ export const environmentPhotos = [
 
 // 来院路线地图
 export const directionPhoto = "https://www.tzqmyk.com/upload_files/other/12_20220621170610_ivgxc.jpg";
+
