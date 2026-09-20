@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yuweiqian1984-ops.github.io/tmey-eye-hospital/sitemap.xml
