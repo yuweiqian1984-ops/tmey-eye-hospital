@@ -1,7 +1,11 @@
 "use client";
 import Link from "next/link";
+import { departments, hospitalInfo } from "../../../lib/data";
 
 export default function FundusPage() {
+  const dept = departments.find(d => d.id === "fundus");
+  if (!dept) return null;
+
   return (
     <div className="min-h-screen bg-white">
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
@@ -14,7 +18,7 @@ export default function FundusPage() {
             <div className="hidden md:flex items-center gap-8">
               <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium text-sm">首页</Link>
               <Link href="/about" className="text-gray-700 hover:text-blue-600 font-medium text-sm">医院概况</Link>
-              <span className="text-blue-600 font-medium text-sm">眼底病专科</span>
+              <span className="text-blue-600 font-medium text-sm">{dept.name}</span>
               <Link href="/team" className="text-gray-700 hover:text-blue-600 font-medium text-sm">专家团队</Link>
               <Link href="/equipment" className="text-gray-700 hover:text-blue-600 font-medium text-sm">先进设备</Link>
               <Link href="/admin" className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">管理后台</Link>
@@ -23,13 +27,13 @@ export default function FundusPage() {
         </div>
       </nav>
 
-      <div className="pt-24 pb-16 bg-gradient-to-br from-amber-700 to-orange-600 text-white">
+      <div className="pt-24 pb-16 bg-gradient-to-br from-amber-600 to-orange-500 text-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="breadcrumb text-white/70 mb-4">
-            <Link href="/" className="hover:text-white">首页</Link> &gt; 眼底病专科
+            <Link href="/" className="hover:text-white">首页</Link> &gt; <Link href="/" className="hover:text-white">科室介绍</Link> &gt; {dept.name}
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">眼底病专科</h1>
-          <p className="text-xl text-white/80">保护好你的眼"底片"</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{dept.name}</h1>
+          <p className="text-xl text-white/80">眼底一张照，眼病早知道</p>
         </div>
       </div>
 
@@ -38,44 +42,69 @@ export default function FundusPage() {
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">科室介绍</h2>
-              <p className="text-gray-700 leading-relaxed mb-8">
-                眼底病专科诊治玻璃体出血、视网膜脱落、黄斑病变、糖尿病视网膜病变等眼底疾病。
-                早发现、早治疗是保护视力的关键。
-              </p>
+              <p className="text-gray-700 leading-relaxed mb-8">{dept.intro}</p>
 
-              <h2 className="text-xl font-bold text-gray-900 mb-4">常见眼底疾病</h2>
-              <div className="space-y-3 mb-8">
-                {["玻璃体出血：眼前突然出现黑影飘动", "飞蚊症：眼前有丝状、点状黑影飘动", "玻璃体混浊：玻璃体液化产生混浊", "糖网病：糖尿病患者常见并发症", "视网膜脱落：突发视力下降、视野缺损", "黄斑病变：中心视力下降"].map((item) => (
-                  <div key={item} className="bg-amber-50 rounded-lg p-4">
-                    <span className="text-gray-700 text-sm">{item}</span>
-                  </div>
-                ))}
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">常见眼底疾病</h2>
+              <div className="grid md:grid-cols-2 gap-4 mb-8">
+                <div className="bg-amber-50 rounded-xl p-6">
+                  <h3 className="font-bold text-gray-900 mb-2">🩸 视网膜脱落</h3>
+                  <p className="text-gray-600 text-sm">常见症状：眼前黑影、闪光感、视力下降。高危人群：高度近视、外伤患者。</p>
+                </div>
+                <div className="bg-amber-50 rounded-xl p-6">
+                  <h3 className="font-bold text-gray-900 mb-2">🔴 糖尿病视网膜病变</h3>
+                  <p className="text-gray-600 text-sm">糖尿病常见并发症，早期无明显症状，定期眼底检查至关重要。</p>
+                </div>
+                <div className="bg-amber-50 rounded-xl p-6">
+                  <h3 className="font-bold text-gray-900 mb-2">👁️ 黄斑病变</h3>
+                  <p className="text-gray-600 text-sm">中心视力下降、视物变形。老年人需警惕年龄相关性黄斑变性。</p>
+                </div>
+                <div className="bg-amber-50 rounded-xl p-6">
+                  <h3 className="font-bold text-gray-900 mb-2">💫 玻璃体混浊</h3>
+                  <p className="text-gray-600 text-sm">俗称"飞蚊症"，眼前有飘动黑影，多为生理性，但也需排查眼底病变。</p>
+                </div>
               </div>
 
-              <h2 className="text-xl font-bold text-gray-900 mb-4">眼底病饮食疗法</h2>
-              <div className="bg-gray-50 rounded-xl p-6">
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li>• 多吃富含维生素A的食物：胡萝卜、南瓜、红薯</li>
-                  <li>• 补充叶黄素：菠菜、羽衣甘蓝等深绿色蔬菜</li>
-                  <li>• 适量补充锌：海产品、坚果、瘦肉</li>
-                  <li>• 控制血糖，预防糖尿病视网膜病变</li>
-                </ul>
+              {dept.articles && dept.articles.length > 0 && (
+                <div className="mt-10">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">科普文章</h2>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {dept.articles.map((article, idx) => (
+                      <div key={idx} className="bg-gray-50 rounded-lg p-4 border hover:border-amber-200 transition-colors">
+                        <h3 className="font-semibold text-gray-900 mb-1">{article.title}</h3>
+                        {article.excerpt && <p className="text-sm text-gray-600">{article.excerpt}</p>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-10 p-6 bg-amber-50 rounded-xl">
+                <h3 className="font-bold text-amber-900 mb-2">眼底病咨询预约电话</h3>
+                <p className="text-amber-700 text-2xl font-bold">{hospitalInfo.phone}</p>
+                <p className="text-amber-600 text-sm mt-1">（微信同号）</p>
               </div>
             </div>
 
             <div className="space-y-6">
               <div className="bg-gray-50 rounded-xl p-6 border">
-                <h3 className="font-bold text-gray-900 mb-4">相关科普</h3>
-                <ul className="space-y-3">
-                  {["眼前有黑影飘动怎么办", "视网膜脱落 白领一族成高危人群", "糖网病的症状是什么", "保护好你的眼底片", "眼底出血怎么治疗", "哪些病人需要查眼底"].map((t) => (
-                    <li key={t}><a href="#" className="text-sm text-gray-600 hover:text-amber-600 line-clamp-1">· {t}</a></li>
+                <h3 className="font-bold text-gray-900 mb-4">科室导航</h3>
+                <ul className="space-y-2">
+                  {departments.map((d) => (
+                    <li key={d.id}>
+                      <Link href={`/departments/${d.id}`} className={`text-sm hover:text-blue-600 ${d.id === "fundus" ? "text-amber-600 font-semibold" : "text-gray-600"}`}>
+                        · {d.name}
+                      </Link>
+                    </li>
                   ))}
                 </ul>
               </div>
-              <div className="bg-gradient-to-br from-amber-600 to-orange-600 rounded-xl p-6 text-white">
-                <h3 className="font-bold mb-4">预约检查</h3>
-                <p className="text-white/80 text-sm mb-4">定期检查眼底，保护视力</p>
-                <Link href="/" className="block w-full py-3 bg-white text-gray-800 rounded-lg text-center font-semibold hover:bg-gray-50">立即咨询</Link>
+
+              <div className="bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl p-6 text-white">
+                <h3 className="font-bold mb-4">在线咨询</h3>
+                <p className="text-white/80 text-sm mb-4">了解眼底检查和治疗</p>
+                <Link href="/" className="block w-full py-3 bg-white text-amber-700 rounded-lg text-center font-semibold hover:bg-amber-50">
+                  立即咨询
+                </Link>
               </div>
             </div>
           </div>
