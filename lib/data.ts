@@ -8,6 +8,7 @@ export interface Doctor {
 }
 
 export interface Equipment {
+  image?: string;
   name: string;
   category: string;
 }
