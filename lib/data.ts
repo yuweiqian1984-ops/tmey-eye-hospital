@@ -24,9 +24,9 @@ export interface Department {
 export const hospitalInfo = {
   name: "滕州启明眼科医院",
   nameShort: "启明眼科",
-  phone: "153-3632-5533",
+  phone: "13396376119",
   phoneLandline: "0632-3596666",
-  address: "山东省滕州市学院中路北安居小区十字路口南",
+  address: "山东省滕州市学院路2899号",
   yearEstablished: "2013",
   beds: 80,
   surgeries: "50000+",
